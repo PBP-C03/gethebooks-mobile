@@ -60,15 +60,18 @@ Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk ber
 
 
 ### User terdaftar
-1. Mengunggah dan menjual buku di katalog
-2. Mengakses halaman QNA
+1. Melihat homepage
+2. Mengunjungi katalog aplikasi
+2. Mengakses forum QnA aplikasi
 3. Menambahkan buku ke dalam keranjang
-4. Melakukan checkout pada buku yang sudah dimasukkan ke keranjang
+4. Melakukan pembayaran buku dalam keranjang
+5. Menambahkan saldo ke dalam akun pengguna
 
 
-### Admin (Super User)
-1. Manajemen Konten:
-    - Menambahkan dan menghapus katalog buku
-    - Mengakses semua modul yang tersedia
-2. Manajemen Pengguna:
-    - Mengubah status atau hapus akun.
+
+## Alur pengintegrasian dengan web service
+
+
+
+## Berita Acara
+[Berita Acara](https://docs.google.com/spreadsheets/d/1l3SVQlrwXRMFPmH6XVyqReK40lICL3elLnwczUgSlMg/edit?usp=sharing)
