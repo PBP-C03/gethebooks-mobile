@@ -27,12 +27,12 @@ Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk ber
 ## Daftar Modul
 1. Fitur Upload Buku ke katalog
     - Developer : Kaisa Dian Ferdinand
-    - Deskripsi : Fitur untuk menambahkan buku baru yang akan dijual ke dalam katalog *website*. Pengguna dapat dengan bebas mengisi nama buku, harga buku, gambar, serta penulis
+    - Deskripsi : Fitur untuk menambahkan buku baru yang akan dijual ke dalam katalog *mobile app*. Pengguna dapat dengan bebas mengisi nama buku, harga buku, gambar, serta penulis
 
 
 2. Fitur QnA Forum
     - Developer : Kezia Natalia Theodora N.
-    - Deskripsi : Fitur sebagai tempat diskusi pengguna terhadap buku - buku yang terdaftar dalam katalog *website*
+    - Deskripsi : Fitur sebagai tempat diskusi pengguna terhadap buku - buku yang terdaftar dalam katalog *mobile app*
 
 3. Fitur Review and Rating
     - Developer : Steven Faustin Orginata
@@ -44,7 +44,7 @@ Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk ber
 
 5. Fitur *Checkout* Produk
     - Developer : Yosef Nuraga Wicaksana
-    - Deskripsi : Fitur untuk melakukan *checkout* buku-buku yang sudah ada di keranjang. Pengguna akan diminta informasi mengenai email, dll.
+    - Deskripsi : Fitur untuk melakukan *checkout* buku-buku yang sudah ada di keranjang. Pengguna akan diminta informasi mengenai alamat dan jasa pengiriman, dll.
 
 
 ## Sumber referensi *dataset* opsional
@@ -60,15 +60,34 @@ Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk ber
 
 
 ### User terdaftar
-1. Mengunggah dan menjual buku di katalog
-2. Mengakses halaman QNA
+1. Melihat homepage
+2. Mengunjungi katalog aplikasi
+2. Mengakses forum QnA aplikasi
 3. Menambahkan buku ke dalam keranjang
-4. Melakukan checkout pada buku yang sudah dimasukkan ke keranjang
+4. Melakukan pembayaran buku dalam keranjang
+5. Menambahkan saldo ke dalam akun pengguna
 
 
-### Admin (Super User)
-1. Manajemen Konten:
-    - Menambahkan dan menghapus katalog buku
-    - Mengakses semua modul yang tersedia
-2. Manajemen Pengguna:
-    - Mengubah status atau hapus akun.
+
+## Alur pengintegrasian aplikasi mobile dengan web service
+### Untuk fitur Review:
+
+User akan membuka halaman review dengan meng-klik buku yang ingin dilihat. Lalu, data review akan di-fetch melalui endpoint yang telah dibuat pada PTS. Endpoint untuk review adalah https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/json/. Kita akan mendapatkan suatu response di mana body response akan di-decode menjadi String JSON. Dari String JSON ini akan dibuat menjadi object Review yang nantinya akan di loop dan di show.
+
+Untuk method post review menggunakan endpoint https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/<id_buku>/add-review/. Terdapat 2 field, yaitu rating dan review. Untuk tiap field, akan diambil valuenya dan akan di-pass menggunakan method pada pbp_django_auth untuk selanjutnya di-post.
+
+
+
+### Untuk fitur Checkout:
+
+User akan membuka halaman checkout melalui halaman keranjang lalu akan dimulai dengan fetch data feedback melalui endpoint yang digunakan adalah checkoutbook/get-order/. Response yang didapatkan kemudian didecode dengan format JSON sehingga menjadi sebuah Map. Map yang telah didapatkan kemudian diiterasi dalam sebuah loop untuk dapat menampilkan pesanan yang sudah dimasukkan ke dalam keranjang. Selain menampilkan kemudian terdapat beberapa endpoint untuk mengubah jumlah book yakni https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/inc-book/<int:id>/ untuk menambahkan jumlah buku, https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/dec-book/<int:id>/ untuk mengurangi jumlah buku, https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/del-book/<int:id>/ untuk menghapus pesanan buku. Kemudian fungsi POST akan menggunakan button yang akan melakukan fetch melalui endpoint checkoutbook/pay-order/.  Response yang didapatkan yakni berupa data mengenai pembayaran user berhasil atau tidak.
+
+
+
+### Untuk fitur Upload Book:
+Fitur Upload Book pada platform GetheBooks memungkinkan pengguna untuk mengunggah buku baru ke dalam koleksi. Prosesnya dimulai dengan mengisi formulir dengan detail buku dan mengunggah file buku. Setelah validasi data, sistem menyimpan informasi ke dalam database dan file di server melalui endpoint khusus seperti https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/add-book/. Pengguna mendapatkan respons berhasil dan dapat melihat buku baru dihalaman profil atau katalog. Opsi tambahan seperti edit data informasi dan delete buku dapat digunakan setelah proses upload, memberikan fleksibilitas dan meningkatkan interaktivitas pengguna.
+
+
+
+## Berita Acara
+[Berita Acara](https://docs.google.com/spreadsheets/d/1l3SVQlrwXRMFPmH6XVyqReK40lICL3elLnwczUgSlMg/edit?usp=sharing)
