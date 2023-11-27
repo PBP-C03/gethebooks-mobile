@@ -1,6 +1,22 @@
-# GetTheBooks
+# GetTheBooks 📚
 
-## Pengembang Aplikasi
+### Kini hadir dalam mobile version!
+
+<br>
+
+<img src="https://github.com/PBP-C03/main-project/assets/122893320/1a43097d-ed39-435c-a419-36cfd97c048d" width="300" alt="GeTheBooks Mockup">
+
+### Deployment Website (TK PTS)
+http://gethebooks-c03-tk.pbp.cs.ui.ac.id/
+
+### Pipeline Status
+[![Pipeline]([Link])]([Link])
+
+### Tautan Link Aplikasi
+[GeTheBooks]([LINK])
+
+
+## Pengembang Aplikasi 🛠️
 Proyek ini dibuat oleh kelompok C03 yang beranggotakan sebagai berikut:
 1. Afsar Rakha Farrasandi - 2206028636
 2. Kaisa Dian Ferdinand - 2206816494
@@ -12,7 +28,7 @@ Proyek ini dibuat oleh kelompok C03 yang beranggotakan sebagai berikut:
 
 ### GeTheBooks
 
-## Cerita aplikasi dan manfaat aplikasi
+## Cerita aplikasi dan manfaat aplikasi 📖
 GeTheBooks adalah sebuah aplikasi revolusioner untuk berjualan buku, yang didesain untuk memperkuat minat baca di kalangan masyarakat Indonesia. Pengguna dapat dengan mudah mengunggah katalog buku pribadi mereka ke dalam aplikasi, sehingga buku-buku tersebut dapat ditemukan dan diakses oleh para pembeli potensial. Selain itu, GeTheBooks juga menyediakan beragam fitur yang mempermudah proses penjualan, termasuk opsi untuk menambahkan deskripsi, menetapkan harga, dan mengelola inventaris buku. Dengan demikian, para penjual dapat memiliki kendali penuh atas aktivitas jual-beli mereka dan memberikan pengalaman yang lebih baik bagi pembeli yang mencari buku-buku yang sesuai dengan minat dan preferensi mereka. Hal ini membuat GeTheBooks menjadi platform ideal bagi mereka yang ingin menjual dan berbagi kekayaan literatur mereka dengan komunitas yang berbagi minat.
 
 Selain fitur-fitur utama yang telah disebutkan di atas, GeTheBooks juga menawarkan berbagai fasilitas tambahan yang memperkaya pengalaman pengguna. Salah satunya adalah Fitur QnA Forum, yang memungkinkan pengguna untuk berinteraksi dan berbagi pengetahuan terkait buku-buku yang mereka jual atau minati. Forum ini memberikan ruang bagi diskusi, tanya jawab, serta sarana untuk saling memberi rekomendasi antaranggota komunitas.
@@ -23,28 +39,35 @@ Fitur Keranjang Produk dan Fitur Checkout Produk adalah dua fitur penting lainny
 
 Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk berjualan buku, tetapi juga menciptakan sebuah komunitas yang aktif dan bersemangat dalam berbagi minat terhadap literatur. Dengan demikian, GeTheBooks menjadi lebih dari sekadar aplikasi jual-beli, tetapi juga menjadi wadah untuk menghubungkan para pecinta buku dan memperkuat budaya literasi di Indonesia.
 
+### Kelebihan GeTheBooks
 
-## Daftar Modul
-1. Fitur Upload Buku ke katalog
+- Mengunggah katalog buku pribadi 📚
+- Menemukan pembeli potensial 👥
+- Mengelola inventaris buku dengan mudah 🗃️
+- Memberikan pengalaman jual-beli yang nyaman 🛍️
+
+
+## Daftar Modul ⭐
+1. **Upload Book** 📖
     - Developer : Kaisa Dian Ferdinand
-    - Deskripsi : Fitur untuk menambahkan buku baru yang akan dijual ke dalam katalog *mobile app*. Pengguna dapat dengan bebas mengisi nama buku, harga buku, gambar, serta penulis
+    - Deskripsi : Fitur untuk menambahkan buku baru yang akan dijual ke dalam katalog *Mobile App*. Pengguna dapat dengan bebas mengisi nama buku, harga buku, gambar, serta penulis
 
 
-2. Fitur QnA Forum
+2. **QnA Forum** 💬
     - Developer : Kezia Natalia Theodora N.
-    - Deskripsi : Fitur sebagai tempat diskusi pengguna terhadap buku - buku yang terdaftar dalam katalog *mobile app*
+    - Deskripsi : Fitur sebagai tempat diskusi pengguna terhadap buku - buku yang terdaftar dalam katalog *Mobile App*
 
-3. Fitur Review and Rating
+3. **Review and Rating** 🌟
     - Developer : Steven Faustin Orginata
     - Deskripsi : Fitur ini memungkinkan pengguna untuk memberikan ulasan dan penilaian terhadap buku-buku yang mereka beli atau baca
 
-4. Fitur Keranjang Produk
+4. **Keranjang Produk** 🛒
     - Developer : Afsar Rakha Farrasandi
     - Deskripsi :  Fitur untuk menyimpan buku di keranjang belanja yang ingin dibeli oleh pengguna sebelum melakukan pembayaran. Pengguna dapat mengatur jumlah buku yang ingin dibeli sesuai dengan yang diinginkan.
 
-5. Fitur *Checkout* Produk
+5. **Checkout Produk** 💳
     - Developer : Yosef Nuraga Wicaksana
-    - Deskripsi : Fitur untuk melakukan *checkout* buku-buku yang sudah ada di keranjang. Pengguna akan diminta informasi mengenai alamat dan jasa pengiriman, dll.
+    - Deskripsi : Fitur untuk melakukan *checkout* buku-buku yang sudah ada di keranjang. Pengguna akan diminta informasi mengenai email, dll.
 
 
 ## Sumber referensi *dataset* opsional
@@ -67,27 +90,14 @@ Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk ber
 4. Melakukan pembayaran buku dalam keranjang
 5. Menambahkan saldo ke dalam akun pengguna
 
+## Alur pengintegrasian dengan web service
 
-
-## Alur pengintegrasian aplikasi mobile dengan web service
-### Untuk fitur Review:
-
-User akan membuka halaman review dengan meng-klik buku yang ingin dilihat. Lalu, data review akan di-fetch melalui endpoint yang telah dibuat pada PTS. Endpoint untuk review adalah https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/json/. Kita akan mendapatkan suatu response di mana body response akan di-decode menjadi String JSON. Dari String JSON ini akan dibuat menjadi object Review yang nantinya akan di loop dan di show.
-
-Untuk method post review menggunakan endpoint https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/<id_buku>/add-review/. Terdapat 2 field, yaitu rating dan review. Untuk tiap field, akan diambil valuenya dan akan di-pass menggunakan method pada pbp_django_auth untuk selanjutnya di-post.
-
-
-
-### Untuk fitur Checkout:
-
-User akan membuka halaman checkout melalui halaman keranjang lalu akan dimulai dengan fetch data feedback melalui endpoint yang digunakan adalah checkoutbook/get-order/. Response yang didapatkan kemudian didecode dengan format JSON sehingga menjadi sebuah Map. Map yang telah didapatkan kemudian diiterasi dalam sebuah loop untuk dapat menampilkan pesanan yang sudah dimasukkan ke dalam keranjang. Selain menampilkan kemudian terdapat beberapa endpoint untuk mengubah jumlah book yakni https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/inc-book/<int:id>/ untuk menambahkan jumlah buku, https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/dec-book/<int:id>/ untuk mengurangi jumlah buku, https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/del-book/<int:id>/ untuk menghapus pesanan buku. Kemudian fungsi POST akan menggunakan button yang akan melakukan fetch melalui endpoint checkoutbook/pay-order/.  Response yang didapatkan yakni berupa data mengenai pembayaran user berhasil atau tidak.
-
-
-
-### Untuk fitur Upload Book:
-Fitur Upload Book pada platform GetheBooks memungkinkan pengguna untuk mengunggah buku baru ke dalam koleksi. Prosesnya dimulai dengan mengisi formulir dengan detail buku dan mengunggah file buku. Setelah validasi data, sistem menyimpan informasi ke dalam database dan file di server melalui endpoint khusus seperti https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/add-book/. Pengguna mendapatkan respons berhasil dan dapat melihat buku baru dihalaman profil atau katalog. Opsi tambahan seperti edit data informasi dan delete buku dapat digunakan setelah proses upload, memberikan fleksibilitas dan meningkatkan interaktivitas pengguna.
-
-
+- Menambahkan dependensi HTTP
+- Membuat models dari data.
+- Mengambil data JSON dari aplikasi web.
+- Mengkonversi data yang telah diambil ke dalam bentuk models dengan manual serializations menggunakan built in JSON decoder.
+- Mengimplementasikan desain front-end sesuai dengan aplikasi sebelumnya.
+Integrasi front-end dan back-end.
 
 ## Berita Acara
 [Berita Acara](https://docs.google.com/spreadsheets/d/1l3SVQlrwXRMFPmH6XVyqReK40lICL3elLnwczUgSlMg/edit?usp=sharing)
