@@ -77,7 +77,7 @@ User akan membuka halaman review dengan meng-klik buku yang ingin dilihat. Lalu,
 Untuk method post review menggunakan endpoint https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/<id_buku>/add-review/. Terdapat 2 field, yaitu rating dan review. Untuk tiap field, akan diambil valuenya dan akan di-pass menggunakan method pada pbp_django_auth untuk selanjutnya di-post.
 
 
-yyy
+
 ### Untuk fitur Checkout:
 
 User akan membuka halaman checkout melalui halaman keranjang lalu akan dimulai dengan fetch data feedback melalui endpoint yang digunakan adalah checkoutbook/get-order/. Response yang didapatkan kemudian didecode dengan format JSON sehingga menjadi sebuah Map. Map yang telah didapatkan kemudian diiterasi dalam sebuah loop untuk dapat menampilkan pesanan yang sudah dimasukkan ke dalam keranjang. Selain menampilkan kemudian terdapat beberapa endpoint untuk mengubah jumlah book yakni https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/inc-book/<int:id>/ untuk menambahkan jumlah buku, https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/dec-book/<int:id>/ untuk mengurangi jumlah buku, https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkoutbook/del-book/<int:id>/ untuk menghapus pesanan buku. Kemudian fungsi POST akan menggunakan button yang akan melakukan fetch melalui endpoint checkoutbook/pay-order/.  Response yang didapatkan yakni berupa data mengenai pembayaran user berhasil atau tidak.
