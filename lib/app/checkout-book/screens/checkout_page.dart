@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:gethebooks/app/cart-book/models/book_card.dart';
+import 'package:gethebooks/app/cart-book/models/book_cart.dart';
 // import 'package:pbp_flutter/widget/left_drawer.dart';
 
 class OrderPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _OrderPageState extends State<OrderPage> {
     }
 
 }
-Future<List<Book_Cart>> fetchProduct() async {
+Future<List<Bookcart>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     // final int cart_id = 
     var cart_data = await fetchData("get-cart/");
@@ -42,10 +42,10 @@ Future<List<Book_Cart>> fetchProduct() async {
     var order_data = await fetchData("get-order/");
 
     // melakukan konversi data json menjadi object Product
-    List<Book_Cart> listOrder = [];
+    List<Bookcart> listOrder = [];
     for (var d in order_data[0]) {
         if (d != null && d['fields']['carts'] == cart_id) {
-            listOrder.add(Book_Cart.fromJson(d));
+            listOrder.add(Bookcart.fromJson(d));
         }
     }
     return listOrder;
