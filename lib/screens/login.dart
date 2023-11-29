@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: handleLogin, // Call the login handler
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue[300],
-                fixedSize: Size(MediaQuery.of(context).size.width - 400, 50),
+                fixedSize: Size(MediaQuery.of(context).size.width - 250, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

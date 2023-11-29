@@ -30,7 +30,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.forum),
-          label: 'Chat',
+          label: 'Forum',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
