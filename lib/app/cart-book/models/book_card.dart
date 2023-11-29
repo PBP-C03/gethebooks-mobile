@@ -1,25 +1,25 @@
 // To parse this JSON data, do
 //
-//     final Book_Cart = Book_CartFromJson(jsonString);
+//     final bookcart = bookcartFromJson(jsonString);
 
 import 'dart:convert';
 
-List<Book_Cart> Book_CartFromJson(String str) => List<Book_Cart>.from(json.decode(str).map((x) => Book_Cart.fromJson(x)));
+List<Bookcart> bookcartFromJson(String str) => List<Bookcart>.from(json.decode(str).map((x) => Bookcart.fromJson(x)));
 
-String bookCartToJson(List<Book_Cart> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String bookcartToJson(List<Bookcart> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Book_Cart {
+class Bookcart {
     String model;
     int pk;
     Fields fields;
 
-    Book_Cart({
+    Bookcart({
         required this.model,
         required this.pk,
         required this.fields,
     });
 
-    factory Book_Cart.fromJson(Map<String, dynamic> json) => Book_Cart(
+    factory Bookcart.fromJson(Map<String, dynamic> json) => Bookcart(
         model: json["model"],
         pk: json["pk"],
         fields: Fields.fromJson(json["fields"]),
@@ -35,10 +35,10 @@ class Book_Cart {
 class Fields {
     int amount;
     int book;
-    int carts;
+    int? carts;
     int subtotal;
     String notes;
-    dynamic nota;
+    int? nota;
 
     Fields({
         required this.amount,
