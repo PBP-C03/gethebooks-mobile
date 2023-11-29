@@ -1,25 +1,25 @@
 // To parse this JSON data, do
 //
-//     final nota = notaFromJson(jsonString);
+//     final cart = cartFromJson(jsonString);
 
 import 'dart:convert';
 
-List<Nota> notaFromJson(String str) => List<Nota>.from(json.decode(str).map((x) => Nota.fromJson(x)));
+List<Cart> cartFromJson(String str) => List<Cart>.from(json.decode(str).map((x) => Cart.fromJson(x)));
 
-String notaToJson(List<Nota> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String cartToJson(List<Cart> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Nota {
+class Cart {
     String model;
     int pk;
     Fields fields;
 
-    Nota({
+    Cart({
         required this.model,
         required this.pk,
         required this.fields,
     });
 
-    factory Nota.fromJson(Map<String, dynamic> json) => Nota(
+    factory Cart.fromJson(Map<String, dynamic> json) => Cart(
         model: json["model"],
         pk: json["pk"],
         fields: Fields.fromJson(json["fields"]),
@@ -34,36 +34,24 @@ class Nota {
 
 class Fields {
     int user;
-    DateTime date;
     int totalAmount;
     int totalHarga;
-    String alamat;
-    String layanan;
 
     Fields({
         required this.user,
-        required this.date,
         required this.totalAmount,
         required this.totalHarga,
-        required this.alamat,
-        required this.layanan,
     });
 
     factory Fields.fromJson(Map<String, dynamic> json) => Fields(
         user: json["user"],
-        date: DateTime.parse(json["date"]),
         totalAmount: json["total_amount"],
         totalHarga: json["total_harga"],
-        alamat: json["alamat"],
-        layanan: json["layanan"],
     );
 
     Map<String, dynamic> toJson() => {
         "user": user,
-        "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
         "total_amount": totalAmount,
         "total_harga": totalHarga,
-        "alamat": alamat,
-        "layanan": layanan,
     };
 }
