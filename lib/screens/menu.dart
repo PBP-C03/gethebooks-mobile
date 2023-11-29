@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gethebooks/screens/list_book.dart';
+import 'package:gethebooks/screens/navbar.dart';
 
 
 class ShopItem {
@@ -22,6 +23,22 @@ class MyHomePage extends StatelessWidget {
         ShopItem("Logout", Icons.logout),
     ];
 
+    void _onItemTapped(int index, BuildContext context) {
+      switch (index) {
+        case 0:
+          // Home is already the current page
+          break;
+        case 1:
+          // Navigate to Katalog Page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProductPage(username: username)),
+          );
+          break;
+        // Handle other cases for Chat and Profile
+      }
+    }
+
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -35,39 +52,59 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
 
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed, // Mengatur tipe agar semua item tetap ditampilkan
-          items: const <BottomNavigationBarItem>[
-
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              label: 'Katalog',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.forum),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-
-          onTap: (index) {
-          if (index == 1) { // Assuming "Eksplorasi" is the second item
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProductPage()),
-            );
-          }
-        },
-          // Menambahkan callback untuk menangani onTap event jika diperlukan:
-          // onTap: _onItemTapped,
+        bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: 0,
+          onItemTapped: (index) => _onItemTapped(index, context),
         ),
+
+
+        // bottomNavigationBar: CustomBottomNavigationBar(
+        //   currentIndex: 0, // Set to 0 for Home
+        //   onItemTapped: (index) {
+        //     if (index == 1) {
+        //       // If we're tapping the 'Katalog' button, navigate to the catalog page
+        //       Navigator.pushReplacement(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => const ProductPage(username: username,)),
+        //       );
+        //     }
+        //     // Handle other indices for navigating to other pages
+        //   },
+        // ),
+
+        // bottomNavigationBar: BottomNavigationBar(
+        //   type: BottomNavigationBarType.fixed, // Mengatur tipe agar semua item tetap ditampilkan
+        //   items: const <BottomNavigationBarItem>[
+
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.home),
+        //       label: 'Home',
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.book),
+        //       label: 'Katalog',
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.forum),
+        //       label: 'Chat',
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.person),
+        //       label: 'Profile',
+        //     ),
+        //   ],
+
+        //   onTap: (index) {
+        //   if (index == 1) { // Assuming "Eksplorasi" is the second item
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => const ProductPage()),
+        //     );
+        //   }
+        // },
+        //   // Menambahkan callback untuk menangani onTap event jika diperlukan:
+        //   // onTap: _onItemTapped,
+        // ),
 
         body: SingleChildScrollView(
           // Widget wrapper yang dapat discroll
@@ -76,7 +113,6 @@ class MyHomePage extends StatelessWidget {
             child: Column(
               // Widget untuk menampilkan children secara vertikal
               children: <Widget>[
-
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                   // Widget Text untuk menampilkan tulisan dengan alignment center dan style yang sesuai
