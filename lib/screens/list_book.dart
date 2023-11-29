@@ -60,39 +60,67 @@ Widget build(BuildContext context) {
                 } else {
                     return GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // Number of items per row
-                        childAspectRatio: 0.6, // Adjust the ratio according to your need
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.8,
                       ),
                       itemCount: snapshot.data!.length,
                       itemBuilder: (_, index) {
                         final book = snapshot.data![index];
-                        Widget imageWidget = const SizedBox(height: 0);
+                        
+                        Widget imageWidget;
                         if (book.fields.image.isNotEmpty) {
-                          imageWidget = Image.network(book.fields.image, fit: BoxFit.cover);
+                          imageWidget = Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15), // More rounded image
+                              child: Image.network(book.fields.image, fit: BoxFit.cover),
+                            ),
+                          );
+                        } else {
+                          imageWidget = const SizedBox(height: 0);
                         }
 
                         return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30), // Rounded corners for the card
+                          ),
                           margin: const EdgeInsets.all(8),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(child: imageWidget), // Display book image
+                              const SizedBox(height: 10),
+
+                              Expanded(child: imageWidget), // Display book image with padding
+
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       book.fields.title,
-                                      style: const TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text("Author: ${book.fields.author}"),
-                                    Text("Price: ${book.fields.price}"),
-                                    Text("Stocks: ${book.fields.stocks}"),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      "Author: ${book.fields.author}",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      "Rp ${book.fields.price}",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      "Stok: ${book.fields.stocks}",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
                                   ],
                                 ),
                               ),

@@ -44,11 +44,11 @@ class MyHomePage extends StatelessWidget {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
+              icon: Icon(Icons.book),
               label: 'Katalog',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
+              icon: Icon(Icons.forum),
               label: 'Chat',
             ),
             BottomNavigationBarItem(
