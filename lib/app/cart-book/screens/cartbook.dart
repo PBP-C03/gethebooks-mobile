@@ -46,7 +46,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<List<Book>> fetchBooks() async {
-    const bookUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/'; // Replace with actual URL
+    const bookUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/'; 
     final response = await http.get(Uri.parse(bookUrl));
 
     if (response.statusCode == 200) {
@@ -57,22 +57,22 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<List<Bookcart>> fetchBookcarts() async {
-    const bookcartUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/bookcart-json/'; // Replace with actual URL
+    const bookcartUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/bookcart-json/'; 
     final response = await http.get(Uri.parse(bookcartUrl));
 
     if (response.statusCode == 200) {
-      return bookcartFromJson(response.body); // Use your model's fromJson factory method
+      return bookcartFromJson(response.body); 
     } else {
       throw Exception('Failed to load bookcarts');
     }
   }
 
   Future<Cart> fetchCart() async {
-    const cartUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cart-json/'; // Replace with actual URL
+    const cartUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cart-json/'; 
     final response = await http.get(Uri.parse(cartUrl));
 
     if (response.statusCode == 200) {
-      List<Cart> carts = cartFromJson(response.body); // Use your model's fromJson factory method
+      List<Cart> carts = cartFromJson(response.body); 
       return carts.isNotEmpty ? carts.first : throw Exception('No carts found');
     } else {
       throw Exception('Failed to load cart');
@@ -84,7 +84,7 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Keranjang', style: TextStyle(color: Colors.black),),
+        title: const Text('Keranjang', style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.yellow[700], 
       ),
       body: Container(
@@ -107,7 +107,7 @@ class _CartPageState extends State<CartPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
               ),
             ),
@@ -116,20 +116,20 @@ class _CartPageState extends State<CartPage> {
                 future: futureBookcarts,
                 builder: (context, snapshotBookcarts) {
                   if (snapshotBookcarts.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (snapshotBookcarts.hasError) {
                     return Center(child: Text('Error: ${snapshotBookcarts.error}'));
                   }
                   if (!snapshotBookcarts.hasData || snapshotBookcarts.data!.isEmpty) {
-                    return Center(child: Text('Your cart is empty'));
+                    return const Center(child: Text('Your cart is empty'));
                   }
 
                   // Now let's fetch the books details using the IDs from the bookcarts
                   return FutureBuilder<List<Book>>(
                     future: futureBooks,
                     builder: (context, snapshotBooks) {
-                      if (!snapshotBooks.hasData) return CircularProgressIndicator();
+                      if (!snapshotBooks.hasData) return const CircularProgressIndicator();
 
                       // Create a map of book IDs to Book objects for easy lookup
                       Map<int, Book> booksMap = {
@@ -146,7 +146,7 @@ class _CartPageState extends State<CartPage> {
                             return const Text('');
                           }
                           return Card(
-                            color: Colors.grey[200], 
+                            color: Colors.grey[100], 
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25.0), // Rounded corners for card
                             ),
@@ -167,32 +167,34 @@ class _CartPageState extends State<CartPage> {
                                           fit: BoxFit.cover,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(book.fields.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                            SizedBox(height: 10),
-                                            Text(book.fields.author, style: TextStyle(fontSize: 16)),
-                                            SizedBox(height: 10),
+                                            Text(book.fields.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                            const SizedBox(height: 10),
+                                            Text(book.fields.author, style: const TextStyle(fontSize: 16)),
+                                            const SizedBox(height: 10),
                                             Text('IDR ${book.fields.price}', style: TextStyle( color: Colors.blue[600], fontSize: 16, fontWeight: FontWeight.bold)),
-                                            SizedBox(height: 10),
-                                            Text('Notes: ${bookcart.fields.notes}', style: TextStyle( fontSize: 16, fontWeight: FontWeight.bold)),
+                                            const SizedBox(height: 10),
+                                            Text('Notes: ${bookcart.fields.notes}', style: const TextStyle( fontSize: 16, fontWeight: FontWeight.bold)),
                                             // Your notes widget goes here
                                           ],
                                         ),
                                       ),
                                       Column(
                                         children: [
-                                          IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {}),
+                                          IconButton(icon: const Icon(Icons.add_circle_outline), 
+                                            onPressed: () {}),
                                           Text('${bookcart.fields.amount}'),
-                                          IconButton(icon: Icon(Icons.remove_circle_outline), onPressed: () {}),
+                                          IconButton(icon: const Icon(Icons.remove_circle_outline), 
+                                            onPressed: () {}),
                                         ],
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 15,),
+                                  const SizedBox(height: 15,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
