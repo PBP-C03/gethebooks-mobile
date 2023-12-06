@@ -1,152 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:gethebooks/app/cart-book/models/book_cart.dart';
-// import 'package:pbp_flutter/widget/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:gethebooks/app/checkout-book/widgets/checkout_card.dart';
+import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-    const OrderPage({Key? key}) : super(key: key);
+  OrderPage({Key? key}) : super(key: key);
 
-    @override
-    _OrderPageState createState() => _OrderPageState();
+  @override
+  _OrderPageState createState() => _OrderPageState();
 }
 
 class _OrderPageState extends State<OrderPage> {
-  Future<Map<String, dynamic>> fetchData(String endpoint) async {
-    try {
-      var url = Uri.parse('http://localhost:8000/$endpoint');
-      var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
-      );
+  // Future<Map<String, dynamic>> fetchData(String endpoint) async {
+  //   try {
+  //     var url = Uri.parse('http://localhost:8000/$endpoint');
+  //     var response = await http.get(
+  //       url,
+  //       headers: {"Content-Type": "application/json"},
+  //     );
 
-      if (response.statusCode == 200) {
-        return jsonDecode(utf8.decode(response.bodyBytes));
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (error) {
-      throw Exception('Error: $error');
+  //     if (response.statusCode == 200) {
+  //       return jsonDecode(utf8.decode(response.bodyBytes));
+  //     } else {
+  //       throw Exception('Failed to load data');
+  //     }
+  //   } catch (error) {
+  //     throw Exception('Error: $error');
+  //   }
+  // }
+
+  Future<List<OrderItem>> fetchOrderItem(var request) async {
+
+    List<OrderItem> orderData = [];
+    var orderRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-order/");
+    for (var data in orderRaw){
+      var fields = data["fields"];
+      var bookRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-book/${fields["book"]}/");
+      var bookFields = bookRaw[0]["fields"];
+      orderData.add(
+        OrderItem(
+          data["pk"],
+          bookFields["title"],
+          bookFields["author"],
+          bookFields["image"],
+          fields["amount"],
+          bookFields["price"])
+        );
     }
-
-}
-Future<List<Bookcart>> fetchProduct() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    // final int cart_id = 
-    var cart_data = await fetchData("get-cart/");
-    var cart_id = cart_data[0]["pk"];
-    var user = cart_data[0]["user"];
-    var cart_amount = cart_data[0]["total_amount"];
-    var cart_price = cart_data[0]["total_harga"];
-
-    var order_data = await fetchData("get-order/");
-
-    // melakukan konversi data json menjadi object Product
-    List<Bookcart> listOrder = [];
-    for (var d in order_data[0]) {
-        if (d != null && d['fields']['carts'] == cart_id) {
-            listOrder.add(Bookcart.fromJson(d));
-        }
-    }
-    return listOrder;
-}
-
-@override
-Widget build(BuildContext context) {
+    return orderData;
+  }
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
-        appBar: AppBar(
-        title: const Text('Game List'),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.indigo,
+      appBar: AppBar(
+        title: const Text('Pembayaran', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.yellow[700],
+      ),
+      body: Container(
+        color: Colors.yellow[100],
+        child: FutureBuilder<List<OrderItem>>(
+          future: fetchOrderItem(request),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text('No data available.'));
+            } else {
+              // Data is available, create a ListView.builder
+              List<OrderItem> orderData = snapshot.data!;
+              return ListView.builder(
+                itemCount: orderData.length,
+                itemBuilder: (context, index) {
+                  return OrderCard(orderData[index]);
+                },
+              );
+            }
+          },
         ),
-        // drawer:  LeftDrawer(id : id),
-        body: FutureBuilder(
-            future: fetchProduct(),
-            builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.data == null) {
-                    return const Center(child: CircularProgressIndicator());
-                } else {
-                    if (!snapshot.hasData) {
-                    return const Column(
-                        children: [
-                        Text(
-                            "Tidak ada data produk.",
-                            style:
-                                TextStyle(color: Color(0xff59A5D8), fontSize: 20),
-                        ),
-                        SizedBox(height: 8),
-                        ],
-                    );
-                } else {
-                    return GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                      ),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (_, index) => GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              content: IntrinsicWidth(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      "${snapshot.data![index].fields.name}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text("Price : ${snapshot.data![index].fields.price}",textAlign: TextAlign.center),
-                                    const SizedBox(height: 5),
-                                    Text("Description : ${snapshot.data![index].fields.description}",textAlign: TextAlign.center),
-                                    const SizedBox(height: 5),
-                                    Text("Amount : ${snapshot.data![index].fields.amount}",textAlign: TextAlign.center),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the alert
-                                  },
-                                  child: Text("Close"),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${snapshot.data![index].fields.name}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
+      ),
+    );
+  }
 
-                    }
-                }
-            }));
-    }
 }

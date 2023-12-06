@@ -3,39 +3,84 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 class OrderItem {
+  final int pk;
   final String name;
+  final String author;
+  final String image;
   final int amount;
+  final int price;
+  
 
-  OrderItem(this.name, this.amount);
+  OrderItem(this.pk,this.name, this.author,this.image,this.amount,this.price);
 }
+
 
 class OrderCard extends StatelessWidget {
   final OrderItem item;
-  final int id;
-  const OrderCard(this.item,this.id, {super.key}); 
+
+  const OrderCard(this.item, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
-
-    return Material(
-      color: Colors.grey[350],
-      child: InkWell(
-        onTap: () async{
-        },
-        
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        elevation: 4, // Add elevation for a subtle shadow effect
+        child: InkWell(
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
+                // Reduced the size of the image using the SizedBox widget
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Image.network(
+                    item.image,
+                    fit: BoxFit.scaleDown, // Maintain aspect ratio and cover the entire box
+                  ),
                 ),
+                const SizedBox(width: 8), // Added padding between elements
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.name,
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(color: Colors.black87),
+                    ),
+                    Text(
+                      "Author: ${item.author}",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                    Text(
+                      "Harga: ${item.price}",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                  ],
+                ),
+                Column(
+                 children: [
+                  IconButton(icon: const Icon(Icons.add_circle_outline), 
+                              onPressed: () {}),
+                  Text(
+                      "Jumlah: ${item.amount}",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+
+                  IconButton(icon: const Icon(Icons.remove_circle_outline), 
+                              onPressed: () {}),
+                                        ], 
+                )
               ],
             ),
           ),
