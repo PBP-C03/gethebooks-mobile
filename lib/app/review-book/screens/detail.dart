@@ -36,11 +36,21 @@ class _DetailBookPageState extends State<DetailBookPage> {
       body: FutureBuilder(
         future: fetchReview(),
         builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator());
+          Widget imageWidget;
+          imageWidget = Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(book.fields.image, fit: BoxFit.cover),
+            ),
+          );
+          Widget reviewWidget;
+          List<Review> reviews = snapshot.data!;
+          if (reviews == null) { // review section
+            reviewWidget = const Center(child: CircularProgressIndicator());
           } else {
             if (!snapshot.hasData) {
-              return const Column(
+              reviewWidget = const Column(
                 children: [
                   Text(
                     "Tidak ada data review",
@@ -51,8 +61,8 @@ class _DetailBookPageState extends State<DetailBookPage> {
                 ],
               );
             } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
+              reviewWidget = ListView.builder(
+                itemCount: reviews.length,
                 itemBuilder: (_, index) => Container(
                   margin: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 12
@@ -61,25 +71,52 @@ class _DetailBookPageState extends State<DetailBookPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${snapshot.data![index].fields.username}",
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.rating}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.date_added}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.review}"),
-                    ],
+                    children: reviews.map((Review review) {
+                      return ReviewCard(review);
+                    }).toList(),
                   ),
                 ),
               );
             }
+            Widget filterWidget;
+            filterWidget = const Text(
+              "filter widget card"
+            );
+            return Column(
+              children: [
+                Expanded(child: imageWidget),
+                const Text(
+                  "Book Title"
+                ),
+                const Text(
+                  "Book Author"
+                ),
+                const Text(
+                  "Book Price"
+                ),
+                const Text(
+                  "Star, 4.5 / 5.0 (289)"
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      "Add review Button"
+                    ),
+                    Text(
+                      "Add to Cart Button"
+                    ),
+                  ],
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      "filter review by rating card"
+                    )
+                  ],
+                ),
+                Expanded(child: reviewWidget),
+              ],
+            );
           }
         },
       ),
