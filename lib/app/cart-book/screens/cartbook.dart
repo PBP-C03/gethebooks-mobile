@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/cart-book/models/book_cart.dart';
 import 'package:gethebooks/app/cart-book/models/cart.dart';
+import 'package:gethebooks/app/checkout-book/screens/checkout_page.dart';
 import 'package:gethebooks/models/book.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -338,7 +339,10 @@ class _CartPageState extends State<CartPage> {
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
-                          // Implement checkout logic
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => OrderPage())
+                            );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blue[
