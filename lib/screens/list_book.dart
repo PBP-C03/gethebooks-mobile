@@ -6,9 +6,8 @@ import 'dart:convert';
 import 'package:gethebooks/models/book.dart';
 
 class ProductPage extends StatefulWidget {
-  final String username;
 
-  const ProductPage({Key? key, required this.username}) : super(key: key);
+  const ProductPage({Key? key}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState();
@@ -18,7 +17,7 @@ class _ProductPageState extends State<ProductPage> {
   Future<List<Book>> fetchProduct() async {
       // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
       var url = Uri.parse(
-          'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
+          'http://127.0.0.1:8000/json/');
       var response = await http.get(
           url,
           headers: {"Content-Type": "application/json"},
@@ -51,7 +50,7 @@ class _ProductPageState extends State<ProductPage> {
               // If we're tapping the 'Katalog' button, navigate to the catalog page
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => MyHomePage(username: widget.username)),
+                MaterialPageRoute(builder: (context) => MyHomePage()),
               );
             }
           },

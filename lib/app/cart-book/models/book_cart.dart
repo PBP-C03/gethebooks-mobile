@@ -35,10 +35,10 @@ class Bookcart {
 class Fields {
     int amount;
     int book;
-    int? carts;
+    int carts;
     int subtotal;
     String notes;
-    int? nota;
+    dynamic nota;
 
     Fields({
         required this.amount,
