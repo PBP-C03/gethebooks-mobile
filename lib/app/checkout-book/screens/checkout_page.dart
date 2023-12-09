@@ -1,152 +1,169 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/checkout-book/widgets/cart_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:gethebooks/app/cart-book/models/book_cart.dart';
-// import 'package:pbp_flutter/widget/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:gethebooks/app/checkout-book/widgets/checkout_card.dart';
+import 'package:gethebooks/app/checkout-book/widgets/balance_card.dart';
+import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-    const OrderPage({Key? key}) : super(key: key);
+  OrderPage({Key? key}) : super(key: key);
 
-    @override
-    _OrderPageState createState() => _OrderPageState();
+  @override
+  _OrderPageState createState() => _OrderPageState();
 }
 
 class _OrderPageState extends State<OrderPage> {
-  Future<Map<String, dynamic>> fetchData(String endpoint) async {
-    try {
-      var url = Uri.parse('http://localhost:8000/$endpoint');
-      var response = await http.get(
-        url,
-        headers: {"Content-Type": "application/json"},
-      );
+  late Future<CartData> cartDataFuture;
+  late Future<List<OrderItem>> orderItemFuture;
+  late Future<BalanceData> balanceDataFuture;
 
-      if (response.statusCode == 200) {
-        return jsonDecode(utf8.decode(response.bodyBytes));
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (error) {
-      throw Exception('Error: $error');
-    }
+  @override
+  void initState() {
+    super.initState();
+    final request = context.read<CookieRequest>();
+    cartDataFuture = fetchCart(request);
+    orderItemFuture = fetchOrderItem(request);
+    balanceDataFuture = fetchBalance(request);
+  }
 
-}
-Future<List<Bookcart>> fetchProduct() async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    // final int cart_id = 
-    var cart_data = await fetchData("get-cart/");
-    var cart_id = cart_data[0]["pk"];
-    var user = cart_data[0]["user"];
-    var cart_amount = cart_data[0]["total_amount"];
-    var cart_price = cart_data[0]["total_harga"];
+  Future<CartData> fetchCart(var request) async {
+    var cartRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-cart/");
+    var data = cartRaw[0];
+    return CartData(data["pk"], data["fields"]["total_amount"], data["fields"]["total_harga"]);
+  }
 
-    var order_data = await fetchData("get-order/");
-
-    // melakukan konversi data json menjadi object Product
-    List<Bookcart> listOrder = [];
-    for (var d in order_data[0]) {
-        if (d != null && d['fields']['carts'] == cart_id) {
-            listOrder.add(Bookcart.fromJson(d));
-        }
-    }
-    return listOrder;
-}
-
-@override
-Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-        title: const Text('Game List'),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.indigo,
+  Future<List<OrderItem>> fetchOrderItem(var request) async {
+    List<OrderItem> orderData = [];
+    var orderRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-order/");
+    for (var data in orderRaw) {
+      var fields = data["fields"];
+      var bookRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-book/${fields["book"]}/");
+      var bookFields = bookRaw[0]["fields"];
+      orderData.add(
+        OrderItem(
+          data["pk"],
+          fields["book"],
+          bookFields["title"],
+          bookFields["author"],
+          bookFields["image"],
+          fields["amount"],
+          bookFields["price"],
         ),
-        // drawer:  LeftDrawer(id : id),
-        body: FutureBuilder(
-            future: fetchProduct(),
-            builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.data == null) {
-                    return const Center(child: CircularProgressIndicator());
+      );
+    }
+    return orderData;
+  }
+
+  Future<BalanceData> fetchBalance(var request) async {
+    var balanceRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/get_saldo/");
+    var balance = balanceRaw[0]["fields"]["saldo"];
+    var cartRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-cart/");
+    var data = cartRaw[0];
+    return BalanceData(balance,data["fields"]["total_harga"], data["fields"]["total_amount"]);
+  }
+
+  Future<void> refreshCartData() async {
+    final request = context.read<CookieRequest>();
+    final newCartData = await fetchCart(request);
+    final newBalanceData = await fetchBalance(request);
+    setState(() {
+      balanceDataFuture = Future.value(newBalanceData);
+      cartDataFuture = Future.value(newCartData);
+      if (newCartData.amount == 0) {
+        orderItemFuture = fetchOrderItem(request);
+      }
+    });
+  }
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pembayaran', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.yellow[700],
+      ),
+      body: Container(
+        color: Colors.yellow[100],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FutureBuilder<CartData>(
+              future: cartDataFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.data!.amount == 0) {
+                  return const Text("");
                 } else {
-                    if (!snapshot.hasData) {
+                    CartData cartData = snapshot.data!;
+                      return Container(
+                        height: 80,
+                        child: CartCard(cartData),
+                      );
+                  }
+              },
+            ),
+            Expanded(
+              child: FutureBuilder<List<OrderItem>>(
+                future: orderItemFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Column(
-                        children: [
-                        Text(
-                            "Tidak ada data produk.",
-                            style:
-                                TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Icon(Icons.remove_shopping_cart_outlined),
                         ),
-                        SizedBox(height: 8),
-                        ],
-                    );
-                } else {
-                    return GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                      ),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (_, index) => GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              content: IntrinsicWidth(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      "${snapshot.data![index].fields.name}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text("Price : ${snapshot.data![index].fields.price}",textAlign: TextAlign.center),
-                                    const SizedBox(height: 5),
-                                    Text("Description : ${snapshot.data![index].fields.description}",textAlign: TextAlign.center),
-                                    const SizedBox(height: 5),
-                                    Text("Amount : ${snapshot.data![index].fields.amount}",textAlign: TextAlign.center),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the alert
-                                  },
-                                  child: Text("Close"),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${snapshot.data![index].fields.name}",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                        Center(
+                          child: Text(
+                            "Tidak ada pemesanan dalam keranjang",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ),
+                        )
+                      ],
                     );
-
-                    }
-                }
-            }));
-    }
+                  } else {
+                    List<OrderItem> orderData = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: orderData.length,
+                      itemBuilder: (context, index) {
+                        return OrderCard(orderData[index], changed: refreshCartData);
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+            FutureBuilder<BalanceData>(
+              future: balanceDataFuture,
+              builder: (context, snapshot){
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.data!.amount == 0) {
+                return const SizedBox.shrink();
+              } else {
+                  BalanceData balanceData = snapshot.data!;
+                    return BalanceCard(balanceData, status: refreshCartData,);
+                  }
+                },
+              )
+          ],
+        ),
+      ),
+    );
+  }
 }
