@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/screens/profile.dart';
 import 'package:gethebooks/screens/login.dart';
 import 'package:gethebooks/screens/user.dart';
 import 'package:http/http.dart' as http;
@@ -18,12 +19,13 @@ class ShopItem {
 }
 
 class MyHomePage extends StatelessWidget {
+  final String username;
   // const MyHomePage({Key? key}) : super(key: key);
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key, required this.username}) : super(key: key);
 
   Future<List<Book>> fetchProduct() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/json/');
+    var url = Uri.parse('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -42,48 +44,30 @@ class MyHomePage extends StatelessWidget {
     return listProduct;
   }
 
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        // Home is already the current page
-        break;
-      case 1:
-        // Navigate to Katalog Page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProductPage()),
-        );
-        break;
-      // Handle other cases for Chat and Profile
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
-
-    // Function to handle logout
-    void _handleLogout() async {
-      var response = await http.post(
-        Uri.parse(
-            'http://127.0.0.1:8000/auth/logout/'), // Update with your logout URL
-        headers: {"Content-Type": "application/json"},
-      );
-
-      // Check if logout is successful
-      if (response.statusCode == 200) {
-        // If logout is successful, navigate the user to the login page
-        user = UserData(isLoggedIn: false, username: "guest");
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-      } else {
-        // If logout failed, show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logout failed. Please try again.')),
-        );
+    void _onItemTapped(int index, BuildContext context) {
+      switch (index) {
+        case 0:
+          // Home is already the current page
+          break;
+        case 1:
+          // Navigate to Katalog Page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProductPage(username: username)),
+          );
+          break;
+        // Handle other cases for Chat and Profile
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage(username: username)),
+          );  
+   // Function to handle logout
       }
     }
 
+    
+    
     // Card for each book in the horizontal list view
     Widget _buildBookCard(Book book) {
       return Card(
@@ -153,7 +137,30 @@ class MyHomePage extends StatelessWidget {
         ),
       );
     }
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
 
+    void _handleLogout() async {
+      var response = await http.post(
+        Uri.parse(
+            'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/logout/'), // Update with your logout URL
+        headers: {"Content-Type": "application/json"},
+      );
+
+      // Check if logout is successful
+      if (response.statusCode == 200) {
+        // If logout is successful, navigate the user to the login page
+        user = UserData(isLoggedIn: false, username: "guest");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      } else {
+        // If logout failed, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logout failed. Please try again.')),
+        );
+      }
+    }
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -368,4 +375,3 @@ class MyHomePage extends StatelessWidget {
 //       ),
 //     );
 //   }
-// }

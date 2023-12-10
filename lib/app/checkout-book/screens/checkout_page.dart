@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/checkout-book/widgets/cart_data.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:gethebooks/app/checkout-book/widgets/checkout_card.dart';
