@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gethebooks/screens/profile.dart';
+import 'package:gethebooks/screens/login.dart';
+import 'package:gethebooks/screens/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:gethebooks/app/cart-book/screens/cartbook.dart';
 import 'package:gethebooks/models/book.dart';
 import 'package:gethebooks/screens/list_book.dart';
 import 'package:gethebooks/screens/navbar.dart';
-
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class ShopItem {
   final String name;
@@ -15,33 +18,31 @@ class ShopItem {
   ShopItem(this.name, this.icon);
 }
 
-
 class MyHomePage extends StatelessWidget {
-    // const MyHomePage({Key? key}) : super(key: key);
-    const MyHomePage({Key? key, required this.username}) : super(key: key);
-    final String username;
+  final String username;
+  // const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key, required this.username}) : super(key: key);
 
-    Future<List<Book>> fetchProduct() async {
-        // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-        var url = Uri.parse(
-            'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
-        var response = await http.get(
-            url,
-            headers: {"Content-Type": "application/json"},
-        );
+  Future<List<Book>> fetchProduct() async {
+    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+    var url = Uri.parse('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
 
-        // melakukan decode response menjadi bentuk json
-        var data = jsonDecode(utf8.decode(response.bodyBytes));
+    // melakukan decode response menjadi bentuk json
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-        // melakukan konversi data json menjadi object Product
-        List<Book> listProduct = [];
-        for (var d in data) {
-            if (d != null) {
-                listProduct.add(Book.fromJson(d));
-            }
-        }
-        return listProduct;
+    // melakukan konversi data json menjadi object Product
+    List<Book> listProduct = [];
+    for (var d in data) {
+      if (d != null) {
+        listProduct.add(Book.fromJson(d));
+      }
     }
+    return listProduct;
+  }
 
     void _onItemTapped(int index, BuildContext context) {
       switch (index) {
@@ -61,82 +62,106 @@ class MyHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => ProfilePage(username: username)),
           );  
+   // Function to handle logout
       }
     }
 
-    @override
-    Widget build(BuildContext context) {
+    
+    
+    // Card for each book in the horizontal list view
+    Widget _buildBookCard(Book book) {
+      return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Rounded corners
+        ),
+        elevation: 5, // Shadow effect
+        child: Container(
+          width: 150, // Fixed width for symmetry
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                child: Image.network(
+                  book.fields.image,
+                  height: 100, // Fixed height for image
+                  width: double.infinity, // Image width matches card
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      book.fields.title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      book.fields.author,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'IDR ${book.fields.price}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Stok: ${book.fields.stocks}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
 
-      // Card for each book in the horizontal list view
-      Widget _buildBookCard(Book book) {
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15), // Rounded corners
-          ),
-          elevation: 5, // Shadow effect
-          child: Container(
-            width: 150, // Fixed width for symmetry
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                  child: Image.network(
-                    book.fields.image,
-                    height: 100, // Fixed height for image
-                    width: double.infinity, // Image width matches card
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        book.fields.title,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        book.fields.author,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'IDR ${book.fields.price}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'Stok: ${book.fields.stocks}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+    void _handleLogout() async {
+      var response = await http.post(
+        Uri.parse(
+            'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/logout/'), // Update with your logout URL
+        headers: {"Content-Type": "application/json"},
+      );
+
+      // Check if logout is successful
+      if (response.statusCode == 200) {
+        // If logout is successful, navigate the user to the login page
+        user = UserData(isLoggedIn: false, username: "guest");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      } else {
+        // If logout failed, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logout failed. Please try again.')),
         );
       }
-      return Scaffold(
+    }
+    return Scaffold(
         appBar: AppBar(
           title: const Text(
             'GeTheBooks',
@@ -145,61 +170,10 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
         ),
-
         bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: 0,
           onItemTapped: (index) => _onItemTapped(index, context),
         ),
-
-
-        // bottomNavigationBar: CustomBottomNavigationBar(
-        //   currentIndex: 0, // Set to 0 for Home
-        //   onItemTapped: (index) {
-        //     if (index == 1) {
-        //       // If we're tapping the 'Katalog' button, navigate to the catalog page
-        //       Navigator.pushReplacement(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => const ProductPage(username: username,)),
-        //       );
-        //     }
-        //     // Handle other indices for navigating to other pages
-        //   },
-        // ),
-
-        // bottomNavigationBar: BottomNavigationBar(
-        //   type: BottomNavigationBarType.fixed, // Mengatur tipe agar semua item tetap ditampilkan
-        //   items: const <BottomNavigationBarItem>[
-
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.home),
-        //       label: 'Home',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.book),
-        //       label: 'Katalog',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.forum),
-        //       label: 'Chat',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.person),
-        //       label: 'Profile',
-        //     ),
-        //   ],
-
-        //   onTap: (index) {
-        //   if (index == 1) { // Assuming "Eksplorasi" is the second item
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => const ProductPage()),
-        //     );
-        //   }
-        // },
-        //   // Menambahkan callback untuk menangani onTap event jika diperlukan:
-        //   // onTap: _onItemTapped,
-        // ),
-
         body: SingleChildScrollView(
           child: Container(
             color: Colors.yellow[100],
@@ -212,9 +186,8 @@ class MyHomePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       const Padding(
-                        padding: EdgeInsets.only(left:20.0), 
+                        padding: EdgeInsets.only(left: 20.0),
                         child: Text(
                           'Selamat Datang,',
                           style: TextStyle(
@@ -224,16 +197,20 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      
                       Padding(
-                        padding: const EdgeInsets.only(right: 15.0), // Berikan ruang di sebelah kiri
+                        padding: const EdgeInsets.only(
+                            right: 15.0), // Berikan ruang di sebelah kiri
                         child: IconButton(
-                          icon: const Icon(Icons.shopping_cart, size: 35,),
+                          icon: const Icon(
+                            Icons.shopping_cart,
+                            size: 35,
+                          ),
                           onPressed: () {
                             // Navigate to the cart page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => CartPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => CartPage()),
                             );
                           },
                         ),
@@ -247,11 +224,11 @@ class MyHomePage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0),
                         child: Text(
-                          '$username!',
+                          '${user.username}!',
                           style: const TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -259,18 +236,25 @@ class MyHomePage extends StatelessWidget {
                   ),
 
                   Container(
-                    margin: const EdgeInsets.all(16.0), // Memberikan jarak antara container dan widget lainnya
-                    width: MediaQuery.of(context).size.width - 32, // Mengambil lebar layar dan mengurangi margin
+                    margin: const EdgeInsets.all(
+                        16.0), // Memberikan jarak antara container dan widget lainnya
+                    width: MediaQuery.of(context).size.width -
+                        32, // Mengambil lebar layar dan mengurangi margin
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.yellow, // Ganti dengan warna yang diinginkan
-                      borderRadius: BorderRadius.circular(30), // Memberikan sudut yang bulat
-                      boxShadow: [ // Menambahkan shadow
+                      color:
+                          Colors.yellow, // Ganti dengan warna yang diinginkan
+                      borderRadius: BorderRadius.circular(
+                          30), // Memberikan sudut yang bulat
+                      boxShadow: [
+                        // Menambahkan shadow
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5), // Warna shadow
-                          spreadRadius: 0, // Menentukan seberapa jauh shadow menyebar dari setiap sisi box
+                          spreadRadius:
+                              0, // Menentukan seberapa jauh shadow menyebar dari setiap sisi box
                           blurRadius: 10, // Kekaburan shadow
-                          offset: const Offset(0, 5), // Posisi shadow secara horizontal dan vertikal
+                          offset: const Offset(0,
+                              5), // Posisi shadow secara horizontal dan vertikal
                         ),
                       ],
                     ),
@@ -278,8 +262,8 @@ class MyHomePage extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.all(20.0),
                       child: Column(
-                        // Isi child dengan konten yang diinginkan, misalnya gambar dan teks
-                      ),
+                          // Isi child dengan konten yang diinginkan, misalnya gambar dan teks
+                          ),
                     ),
                   ),
 
@@ -292,7 +276,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   // Horizontal ListView for books
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -301,11 +285,14 @@ class MyHomePage extends StatelessWidget {
                       child: FutureBuilder<List<Book>>(
                         future: fetchProduct(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
                           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                            return const Center(child: Text('No products found'));
+                            return const Center(
+                                child: Text('No products found'));
                           }
                           return ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -323,13 +310,26 @@ class MyHomePage extends StatelessWidget {
                     ),
                   ),
 
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: ElevatedButton(
+                        onPressed: _handleLogout,
+                        child: Text('Logout'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red, // Logout button color
+                          onPrimary: Colors.white, // Logout text color
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-        )
-      );
-    }
+        ));
+  }
 }
 
 // class ShopCard extends StatelessWidget {
@@ -375,4 +375,3 @@ class MyHomePage extends StatelessWidget {
 //       ),
 //     );
 //   }
-// }

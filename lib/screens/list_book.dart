@@ -8,7 +8,6 @@ import 'package:gethebooks/models/book.dart';
 
 class ProductPage extends StatefulWidget {
   final String username;
-
   const ProductPage({Key? key, required this.username}) : super(key: key);
 
   @override
