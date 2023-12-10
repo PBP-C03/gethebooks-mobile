@@ -42,10 +42,69 @@ class _CartPageState extends State<CartPage> {
             .toList());
       });
     } else {
-      // If query is empty, display all books
       setState(() {
         futureBooks = Future.value(allBooks);
       });
+    }
+  }
+
+  Future<void> removeFromCart(int bookCartId) async {
+    final request = context.read<CookieRequest>();
+    var success = await request.postJson(
+      'http://127.0.0.1:8000/cartbook/remove-from-cart-json/',
+      jsonEncode({"id": bookCartId.toString()}),
+    );
+    if (success["success"]) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Item removed successfully')),
+      );
+      setState(() {
+        futureBookcarts = fetchBookcarts(request);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to remove item')),
+      );
+    }
+  }
+
+  Future<void> tambahAmount(int bookCartId) async {
+    final request = context.read<CookieRequest>();
+    var success = await request.postJson(
+      'http://127.0.0.1:8000/cartbook/tambah-amount-json/',
+      jsonEncode({"tambah": bookCartId.toString()}),
+    );
+    if (success["success"]) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Jumlah buku berhasil ditambahkan')),
+      );
+      setState(() {
+        futureBookcarts = fetchBookcarts(request);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal menambah jumlah buku')),
+      );
+    }
+  }
+
+  Future<void> kurangAmount(int bookCartId) async {
+    final request = context.read<CookieRequest>();
+    var success = await request.postJson(
+      'http://127.0.0.1:8000/cartbook/kurang-amount-json/',
+      jsonEncode({"kurang": bookCartId.toString()}),
+    );
+    if (success["success"]) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Jumlah buku berhasil dikurangi')),
+      );
+      setState(() {
+        futureBookcarts = fetchBookcarts(request);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal mengurangi jumlah buku')),
+      );
     }
   }
 
@@ -129,13 +188,34 @@ class _CartPageState extends State<CartPage> {
                       ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+
                   if (snapshotBookcarts.hasError) {
                     return Center(
                         child: Text('Error: ${snapshotBookcarts.error}'));
                   }
+
                   if (!snapshotBookcarts.hasData ||
                       snapshotBookcarts.data!.isEmpty) {
-                    return const Center(child: Text('Your cart is empty'));
+                    // Tampilan ketika keranjang kosong
+                    return const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.remove_shopping_cart,
+                            size: 75.0,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            "Tidak Ada Pesanan dalam Keranjang",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   }
 
                   return FutureBuilder<List<Book>>(
@@ -174,8 +254,7 @@ class _CartPageState extends State<CartPage> {
                                   Row(
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            12), // Rounded corners for image
+                                        borderRadius: BorderRadius.circular(12),
                                         child: Image.network(
                                           book.fields.image,
                                           width: 130,
@@ -219,21 +298,21 @@ class _CartPageState extends State<CartPage> {
                                       Column(
                                         children: [
                                           IconButton(
-                                              icon: const Icon(
-                                                  Icons.add_circle_outline),
-                                              onPressed: () {}),
+                                              icon: const Icon(Icons.add_circle_outline),
+                                              onPressed: () {
+                                                tambahAmount(bookcart.pk);
+                                              }),
                                           Text('${bookcart.fields.amount}'),
                                           IconButton(
-                                              icon: const Icon(
-                                                  Icons.remove_circle_outline),
-                                              onPressed: () {}),
+                                              icon: const Icon(Icons.remove_circle_outline),
+                                              onPressed: () {
+                                                kurangAmount(bookcart.pk);
+                                              }),
                                         ],
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
+                                  const SizedBox(height: 15,),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -252,32 +331,10 @@ class _CartPageState extends State<CartPage> {
                                             style:
                                                 TextStyle(color: Colors.white),
                                           )),
+                                      // Tombol 'Remove'
                                       ElevatedButton(
                                         onPressed: () async {
-                                          var success = await request.postJson(
-                                              'http://127.0.0.1:8000/cartbook/remove-from-cart-json/',
-                                              jsonEncode({
-                                                "id": bookcart.pk.toString(),
-                                              }));
-                                          if (success["success"]) {
-                                            setState(() {
-                                              futureBookcarts =
-                                                  fetchBookcarts(request);
-                                            });
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Item removed successfully')),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Failed to remove item')),
-                                            );
-                                          }
+                                          await removeFromCart(bookcart.pk);
                                         },
                                         child: Text('Remove'),
                                         style: ElevatedButton.styleFrom(
@@ -341,12 +398,11 @@ class _CartPageState extends State<CartPage> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => OrderPage())
-                            );
+                              MaterialPageRoute(
+                                  builder: (context) => OrderPage()));
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[
-                              600], 
+                          primary: Colors.blue[600],
                           padding: const EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),
                         ),

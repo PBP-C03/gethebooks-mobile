@@ -29,17 +29,17 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Future<CartData> fetchCart(var request) async {
-    var cartRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-cart/");
+    var cartRaw = await request.get("http://127.0.0.1:8000/checkout/get-cart/");
     var data = cartRaw[0];
     return CartData(data["pk"], data["fields"]["total_amount"], data["fields"]["total_harga"]);
   }
 
   Future<List<OrderItem>> fetchOrderItem(var request) async {
     List<OrderItem> orderData = [];
-    var orderRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-order/");
+    var orderRaw = await request.get("http://127.0.0.1:8000/checkout/get-order/");
     for (var data in orderRaw) {
       var fields = data["fields"];
-      var bookRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-book/${fields["book"]}/");
+      var bookRaw = await request.get("http://127.0.0.1:8000/checkout/get-book/${fields["book"]}/");
       var bookFields = bookRaw[0]["fields"];
       orderData.add(
         OrderItem(
@@ -57,9 +57,9 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Future<BalanceData> fetchBalance(var request) async {
-    var balanceRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/get_saldo/");
+    var balanceRaw = await request.get("http://127.0.0.1:8000/get_saldo/");
     var balance = balanceRaw[0]["fields"]["saldo"];
-    var cartRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-cart/");
+    var cartRaw = await request.get("http://127.0.0.1:8000/checkout/get-cart/");
     var data = cartRaw[0];
     return BalanceData(balance,data["fields"]["total_harga"], data["fields"]["total_amount"]);
   }
