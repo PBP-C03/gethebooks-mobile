@@ -50,7 +50,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<List<Book>> fetchBooks() async {
-    const bookUrl = 'http://127.0.0.1:8000/json/';
+    const bookUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/';
     final response = await http
         .get(Uri.parse(bookUrl), headers: {"Content-Type": "application/json"});
 
@@ -62,7 +62,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<List<Bookcart>> fetchBookcarts(request) async {
-    final response = await request.get('http://127.0.0.1:8000/bookcart-json/');
+    final response = await request.get('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/bookcart-json/');
     List<Bookcart> listBookCart = [];
     for (var d in response) {
       if (d != null) {
@@ -73,7 +73,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<Cart?> fetchCart(request) async {
-    final response = await request.get('http://127.0.0.1:8000/cart-json/');
+    final response = await request.get('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cart-json/');
     Cart? keranjang;
     for (var d in response) {
       if (d != null) {
@@ -255,7 +255,7 @@ class _CartPageState extends State<CartPage> {
                                       ElevatedButton(
                                         onPressed: () async {
                                           var success = await request.postJson(
-                                              'http://127.0.0.1:8000/cartbook/remove-from-cart-json/',
+                                              'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/remove-from-cart-json/',
                                               jsonEncode({
                                                 "id": bookcart.pk.toString(),
                                               }));

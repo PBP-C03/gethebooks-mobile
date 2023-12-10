@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gethebooks/screens/menu.dart';
 import 'package:gethebooks/screens/navbar.dart';
+import 'package:gethebooks/screens/profile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:gethebooks/models/book.dart';
 
 class ProductPage extends StatefulWidget {
-
-  const ProductPage({Key? key}) : super(key: key);
+  final String username;
+  const ProductPage({Key? key, required this.username}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState();
@@ -17,7 +18,7 @@ class _ProductPageState extends State<ProductPage> {
   Future<List<Book>> fetchProduct() async {
       // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
       var url = Uri.parse(
-          'http://127.0.0.1:8000/json/');
+          'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
       var response = await http.get(
           url,
           headers: {"Content-Type": "application/json"},
@@ -35,6 +36,25 @@ class _ProductPageState extends State<ProductPage> {
       }
       return list_product;
   }
+  void _onItemTapped(int index, BuildContext context) {
+      switch (index) {
+        case 0:
+          Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage(username: widget.username)),
+              );
+          break;
+        case 1:
+          // Navigate to Katalog Page
+          break;
+        // Handle other cases for Chat and Profile
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage(username: widget.username)),
+          );  
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +65,7 @@ class _ProductPageState extends State<ProductPage> {
 
         bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: 1, // Set to 1 for Katalog
-          onItemTapped: (index) {
-            if (index == 0) {
-              // If we're tapping the 'Katalog' button, navigate to the catalog page
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-              );
-            }
-          },
+          onItemTapped: (index) => _onItemTapped(index, context),
         ),
           
           body: FutureBuilder(
