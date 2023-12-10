@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/screens/profile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:gethebooks/app/cart-book/screens/cartbook.dart';
@@ -55,6 +56,11 @@ class MyHomePage extends StatelessWidget {
           );
           break;
         // Handle other cases for Chat and Profile
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage(username: username)),
+          );  
       }
     }
 
