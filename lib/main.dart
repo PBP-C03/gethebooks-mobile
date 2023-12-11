@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/login.dart';
 import 'package:gethebooks/screens/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
                     useMaterial3: true,
                 ),
                 debugShowCheckedModeBanner: false,
-                home: const LoginPage(),
+                home: const ForumPage(),
                 ),
         );
     }

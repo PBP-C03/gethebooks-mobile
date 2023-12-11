@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/list_book.dart';
 import 'package:gethebooks/screens/navbar.dart';
 
@@ -35,6 +36,14 @@ class MyHomePage extends StatelessWidget {
             MaterialPageRoute(builder: (context) => ProductPage(username: username)),
           );
           break;
+        case 2:
+          // Navigate to QnA Page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ForumPage()),
+          );
+          break;
+
         // Handle other cases for Chat and Profile
       }
     }
