@@ -1,7 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:gethebooks/screens/menu.dart'; // Ensure this is the correct import path
+import 'package:gethebooks/screens/menu.dart'; 
+import 'package:gethebooks/screens/user.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> handleLogin() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-    
+
     final request = context.read<CookieRequest>();
     final response = await request.login("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/login/", {
       'username': username,
@@ -30,13 +31,15 @@ class _LoginPageState extends State<LoginPage> {
     if (request.loggedIn) {
       final String message = response['message'];
       final String uname = response['username'];
+      user = UserData(isLoggedIn: true, username: uname);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MyHomePage(username: uname)),
       );
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text("$message Selamat datang, $uname.")));
+        ..showSnackBar(
+            SnackBar(content: Text("$message Selamat datang, $uname.")));
     } else {
       showDialog(
         context: context,
@@ -57,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Container(
         padding: const EdgeInsets.all(16.0),
         color: Colors.yellow[100], // Light yellow background
@@ -65,7 +67,8 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            const Icon(Icons.account_circle_outlined, size: 100), // Placeholder logo GeTheBooks nanti
+            const Icon(Icons.account_circle_outlined,
+                size: 100), // Placeholder logo GeTheBooks nanti
             const SizedBox(height: 20),
             Text(
               'LOGIN',
@@ -107,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   // Forgot Password logic...
                 },
-                child: Text('Forgot Password?', style: TextStyle(color: Colors.blue[800])),
+                child: Text('Forgot Password?',
+                    style: TextStyle(color: Colors.blue[800])),
               ),
             ),
             const SizedBox(height: 20),
@@ -120,7 +124,10 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text('Login', style: TextStyle(fontSize: 18),),
+              child: const Text(
+                'Login',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
@@ -166,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 // Register logic...
               },
-              child: Text('Don\'t have an account? REGISTER', style: TextStyle(color: Colors.blue[800])),
+              child: Text('Don\'t have an account? REGISTER',
+                  style: TextStyle(color: Colors.blue[800])),
             ),
           ],
         ),
