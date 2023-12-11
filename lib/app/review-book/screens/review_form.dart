@@ -1,17 +1,29 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/review-book/screens/detail.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:gethebooks/models/book.dart';
 
 class ReviewFormPage extends StatefulWidget {
-  const ReviewFormPage({super.key});
+  final Book book;
+  const ReviewFormPage(this.book, {super.key});
 
   @override
   State<ReviewFormPage> createState() => _ReviewFormPageState();
 }
 
 class _ReviewFormPageState extends State<ReviewFormPage> {
+  late Book book;
+
+  @override
+  void initState() {
+    super.initState();
+    book = widget.book;
+  }
+
   final _formKey = GlobalKey<FormState>();
   int _rating = 0;
   String _review = "";
@@ -96,7 +108,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final response = await request.postJson(
-                            "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.id}/create-review-flutter/",
+                            "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/create-review-flutter/",
                             jsonEncode(<String, String>{
                               'rating': _rating.toString(),
                               'review': _review,
