@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gethebooks/screens/login.dart';
+import 'package:gethebooks/authentication/login.dart';
 import 'package:gethebooks/screens/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';

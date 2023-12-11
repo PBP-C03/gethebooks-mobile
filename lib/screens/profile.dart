@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gethebooks/app/checkout-book/widgets/nota_card.dart';
 import 'package:gethebooks/screens/list_book.dart';
 import 'package:gethebooks/screens/menu.dart';
-import 'package:gethebooks/screens/navbar.dart';
+import 'package:gethebooks/widgets/navbar.dart';
 import 'package:gethebooks/widgets/profile_card.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +18,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Future<ProfileData> fetchProfileData(var request) async {
     var profileRaw =
-        await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-user/");
-    var balanceRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/get_saldo/");
+        await request.get("http://127.0.0.1:8000/checkout/get-user/");
+    var balanceRaw = await request.get("http://127.0.0.1:8000/get_saldo/");
     var profileData = profileRaw[0]["fields"];
     var balanceData = balanceRaw[0]["fields"];
     return ProfileData(profileData["username"], balanceData["saldo"]);
@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<List<NotaItem>> fetchNota(var request) async {
     List<NotaItem> orderData = [];
-    var notaRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-nota/");
+    var notaRaw = await request.get("http://127.0.0.1:8000/checkout/get-nota/");
     for (var nota in notaRaw) {
       var data = nota["fields"];
       orderData.add(NotaItem(
