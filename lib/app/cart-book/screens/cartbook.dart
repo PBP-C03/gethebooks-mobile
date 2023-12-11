@@ -48,6 +48,34 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  void showAddNoteDialog(int bookCartId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String note = "";
+        return AlertDialog(
+          title: Text("Add Note"),
+          content: TextField(
+            onChanged: (value) {
+              note = value;
+            },
+            decoration: InputDecoration(hintText: "Write a note here"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Add"),
+              onPressed: () {
+                addNoteToCart(bookCartId, note);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   Future<void> removeFromCart(int bookCartId) async {
     final request = context.read<CookieRequest>();
     var success = await request.postJson(
@@ -108,6 +136,27 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  Future<void> addNoteToCart(int bookCartId, String note) async {
+    final request = context.read<CookieRequest>();
+    var success = await request.postJson(
+      'http://127.0.0.1:8000/cartbook/add-note-json/',
+      jsonEncode({"noteid": bookCartId.toString(), "notes": note}),
+    );
+    if (success["success"]) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Catatan berhasil ditambahkan')),
+      );
+      setState(() {
+        futureBookcarts = fetchBookcarts(request);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal menambahkan catatan')),
+      );
+    }
+  }
+
+
   Future<List<Book>> fetchBooks() async {
     const bookUrl = 'http://127.0.0.1:8000/json/';
     final response = await http
@@ -151,7 +200,7 @@ class _CartPageState extends State<CartPage> {
           'Keranjang',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.yellow[700],
+        backgroundColor: Colors.yellow,
       ),
       body: Container(
         color: Colors.yellow[100],
@@ -184,8 +233,7 @@ class _CartPageState extends State<CartPage> {
               child: FutureBuilder<List<Bookcart>>(
                 future: fetchBookcarts(request),
                 builder: (context, snapshotBookcarts) {
-                  if (snapshotBookcarts.connectionState ==
-                      ConnectionState.waiting) {
+                  if (snapshotBookcarts.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
@@ -239,7 +287,7 @@ class _CartPageState extends State<CartPage> {
                             return const Text('');
                           }
                           return Card(
-                            color: Colors.grey[100],
+                            color: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   25.0), // Rounded corners for card
@@ -323,9 +371,8 @@ class _CartPageState extends State<CartPage> {
                                                 MaterialStatePropertyAll<Color>(
                                                     Colors.blue),
                                           ),
-                                          onPressed: () {
-                                            // Add note logic
-                                          },
+                                          onPressed: () => showAddNoteDialog(bookcart.pk),
+
                                           child: const Text(
                                             'Tambahkan Notes',
                                             style:
@@ -336,9 +383,15 @@ class _CartPageState extends State<CartPage> {
                                         onPressed: () async {
                                           await removeFromCart(bookcart.pk);
                                         },
-                                        child: Text('Remove'),
                                         style: ElevatedButton.styleFrom(
-                                            primary: Colors.red),
+                                            primary: Colors.red
+                                            ),
+                                            
+                                        child: const Text('Remove',
+                                          style: TextStyle(
+                                            color: Colors.white
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -368,8 +421,7 @@ class _CartPageState extends State<CartPage> {
                 }
                 final cart = snapshot.data!;
                 return Container(
-                  color: Colors
-                      .yellow[200], // Adjust the color to match your theme
+                  color: Colors.yellow, // Adjust the color to match your theme
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   child: Column(
