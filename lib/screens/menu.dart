@@ -75,27 +75,6 @@ class MyHomePage extends StatelessWidget {
       }
     }
 
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        // Home is already the current page
-        break;
-      case 1:
-        // Navigate to Katalog Page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProductPage(username: username)),
-        );
-        break;
-      // Handle other cases for Chat and Profile
-      case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage(username: username)),
-        );  
-    // Function to handle logout
-    }
-  }
   
   @override
   Widget build(BuildContext context) {
