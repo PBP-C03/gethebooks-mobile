@@ -104,57 +104,55 @@ class MyHomePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(15.0), // Set padding dari halaman
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 // Widget untuk menampilkan children secara vertikal
                 children: <Widget>[
+                  const SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Selamat Datang,',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 35.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Selamat Datang,',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                '${user.username}!',
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: 15.0), // Berikan ruang di sebelah kiri
+                        padding: const EdgeInsets.only(right: 20.0),
                         child: IconButton(
-                          icon: const Icon(
+                        icon: const Icon(
                             Icons.shopping_cart,
                             size: 35,
                           ),
                           onPressed: () {
-                            // Navigate to the cart page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => CartPage()),
+                              MaterialPageRoute(builder: (context) => CartPage()),
                             );
                           },
                         ),
-                      ),
-                    ],
-                  ),
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          '${user.username}!',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                      )
                     ],
                   ),
 
