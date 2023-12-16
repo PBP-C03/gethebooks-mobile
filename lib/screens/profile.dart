@@ -4,6 +4,7 @@ import 'package:gethebooks/app/checkout-book/widgets/nota_card.dart';
 import 'package:gethebooks/app/upload-book/models/uploadbook.dart';
 import 'package:gethebooks/app/upload-book/screens/upload.dart';
 import 'package:gethebooks/authentication/user.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/list_book.dart';
 import 'package:gethebooks/screens/menu.dart';
 import 'package:gethebooks/widgets/navbar.dart';
@@ -117,6 +118,12 @@ class _ProfilePageState extends State<ProfilePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => ProductPage(username: widget.username)),
+        );
+        break;
+      case 2:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ForumPage()),
         );
         break;
       case 3:
