@@ -80,7 +80,7 @@ Dengan berbagai fitur ini, GeTheBooks tidak hanya menyediakan platform untuk ber
 ### User belum terdaftar
 1. Mengakses homepage
 2. Jika mengakses fitur-fitur seperti Menjual Buku, QnA Forum, Review & Rating, Keranjang Produk, Checkout Produk serta Profile akan keluar notif untuk melakukan login/sign up
-
+      
 
 ### User terdaftar
 1. Melihat homepage
