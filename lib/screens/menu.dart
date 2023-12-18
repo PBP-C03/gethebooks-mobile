@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/profile.dart';
 import 'package:gethebooks/authentication/login.dart';
 import 'package:gethebooks/authentication/user.dart';
@@ -44,28 +45,36 @@ class MyHomePage extends StatelessWidget {
     return listProduct;
   }
 
+    void _onItemTapped(int index, BuildContext context) {
+      switch (index) {
+        case 0:
+          // Home is already the current page
+          break;
+        case 1:
+          // Navigate to Katalog Page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProductPage(username: username)),
+          );
+          break;
+        case 2:
+          // Navigate to QnA Page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ForumPage()),
+          );
+          break;
 
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        // Home is already the current page
-        break;
-      case 1:
-        // Navigate to Katalog Page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProductPage(username: username)),
-        );
-        break;
-      // Handle other cases for Chat and Profile
-      case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage(username: username)),
-        );  
-    // Function to handle logout
+        // Handle other cases for Chat and Profile
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage(username: username)),
+          );  
+   // Function to handle logout
+      }
     }
-  }
+
   
   @override
   Widget build(BuildContext context) {

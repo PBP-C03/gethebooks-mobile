@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/menu.dart';
 import 'package:gethebooks/widgets/navbar.dart';
 import 'package:gethebooks/screens/profile.dart';
@@ -46,6 +47,12 @@ class _ProductPageState extends State<ProductPage> {
           break;
         case 1:
           // Navigate to Katalog Page
+          break;
+        case 2:
+          Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ForumPage()),
+              );
           break;
         // Handle other cases for Chat and Profile
         case 3:
