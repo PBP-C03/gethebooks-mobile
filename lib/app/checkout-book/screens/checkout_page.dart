@@ -81,7 +81,9 @@ class _OrderPageState extends State<OrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pembayaran', style: TextStyle(color: Colors.black)),
+        title: const Text('Pembayaran', style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold)),
         backgroundColor: Colors.yellow[700],
       ),
       body: Container(
@@ -120,13 +122,18 @@ class _OrderPageState extends State<OrderPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Center(
-                          child: Icon(Icons.remove_shopping_cart_outlined),
+                          child: Icon(
+                              Icons.remove_shopping_cart_outlined,
+                              color: Colors.grey,
+                              size: 50,
+                          ),
                         ),
                         Center(
                           child: Text(
                             "Tidak ada pemesanan dalam keranjang",
                             style: TextStyle(
-                              color: Colors.black,
+                              fontSize: 15,
+                              color: Colors.grey,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
