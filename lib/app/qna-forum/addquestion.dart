@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+
+class BookQuestion {
+  final int id;
+  final String title;
+
+  BookQuestion({required this.id, required this.title});
+}
 
 class AddQuestionPage extends StatefulWidget {
   @override
@@ -15,42 +21,57 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController bookNameController = TextEditingController();
   TextEditingController contentController = TextEditingController();
+  int? selectedBookId;
+  List<BookQuestion> books = [];
 
-  Future<void> _submitQuestion(request) async {
+  @override
+  void initState() {
+    super.initState();
+    _fetchBooks();
+  }
+
+  Future<void> _fetchBooks() async {
+    final url = Uri.parse('http://127.0.0.1:8000/json/');
+    final response = await http.get(url);
+
+    List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+    setState(() {
+      books = data.map((item) => BookQuestion(id: item['pk'], title: item['fields']['title'])).toList();
+    });
+
+  }
+
+  Future<void> _submitQuestion() async {
     final request = context.read<CookieRequest>();
-    await request.postJson(url, data)
-
-    final url = Uri.parse('http://127.0.0.1:8000/qna/ask_question_json/');
     
     Map<String, dynamic> data = {
       'title': titleController.text,
-      'book_name': bookNameController.text,
+      'book': selectedBookId.toString(),
       'content': contentController.text,
     };
 
-    final response = await http.post(
-      url,
-      body: jsonEncode(data),
-    );
+    try {
+      final response = await request.postJson('http://127.0.0.1:8000/qna/add-question-json/', jsonEncode(data));
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      if (responseData['result'] == 'Success!') {
+      if (response['result'] == 'Success!') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Question Submitted')),
         );
+
         // Clear text fields after successful submission
         titleController.clear();
-        bookNameController.clear();
         contentController.clear();
+
+        // Kembali ke halaman sebelumnya
+        Navigator.pop(context, true);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to submit question')),
+          SnackBar(content: Text('Failed to submit question: ${response['errors']}')),
         );
       }
-    } else {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${response.statusCode}')),
+        SnackBar(content: Text('Error submitting question')),
       );
     }
   }
@@ -80,15 +101,31 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
                 },
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: bookNameController,
-                decoration: InputDecoration(labelText: 'Book Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a book name';
-                  }
-                  return null;
-                },
+              Container(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButtonFormField<int>(
+                    value: selectedBookId,
+                    isExpanded: true, // Ensure the dropdown fits within the available space
+                    hint: const Text('Select Your Book'),
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        selectedBookId = newValue!;
+                      });
+                    },
+                    items: books.map<DropdownMenuItem<int>>((BookQuestion book) {
+                      return DropdownMenuItem<int>(
+                        value: book.id,
+                        child: Text(book.title, overflow: TextOverflow.ellipsis), // Prevent overflow with ellipsis
+                      );
+                    }).toList(),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select a book';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               TextFormField(

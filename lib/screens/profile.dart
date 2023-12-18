@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/checkout-book/widgets/nota_card.dart';
 import 'package:gethebooks/app/upload-book/models/uploadbook.dart';
@@ -14,7 +13,6 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-
 class ProfilePage extends StatefulWidget {
   final String username;
   const ProfilePage({Key? key, required this.username}) : super(key: key);
@@ -24,7 +22,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   List<Uploadbook> uploadedBooks = [];
 
   @override
@@ -140,8 +137,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pembayaran', style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.yellow[700],
+        title: const Text('Pembayaran', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.yellow,
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 3,
@@ -328,51 +325,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(
                 height: 20,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 20.0),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Daftar Buku",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[700],
-                  ),
-                ),
-              ),
-              // Ubah jadi modul upload buku
-              Container(
-                height: 240,
-                child: FutureBuilder(
-                  future: fetchNota(request),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    } else {
-                      List<NotaItem> notaItems = snapshot.data!;
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: notaItems.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: NotaCard(
-                              notaItems[index],
-                              changed: () {
-                                setState(() {
-                                  notaItems.removeAt(index);
-                                });
-                              },
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
               ),
             ],
           ),

@@ -59,11 +59,6 @@ class _ProfileCardState extends State<ProfileCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text(
-              //   'Hi! ${widget.name}',
-              //   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              // ),
-              // const SizedBox(height: 8.0),
               Text(
                 'Saldo: $_currentBalance', // Display the current balance
                 style: TextStyle(fontSize: 16.0),
