@@ -6,4 +6,4 @@ class UserData{
 
 }
 
-UserData user = UserData(isLoggedIn: false, username: "Guest");
+UserData user = UserData(isLoggedIn: true, username: "Guest");

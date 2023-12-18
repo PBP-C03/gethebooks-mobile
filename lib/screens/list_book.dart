@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/menu.dart';
-import 'package:gethebooks/screens/navbar.dart';
+import 'package:gethebooks/widgets/navbar.dart';
 import 'package:gethebooks/screens/profile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,7 +19,7 @@ class _ProductPageState extends State<ProductPage> {
   Future<List<Book>> fetchProduct() async {
       // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
       var url = Uri.parse(
-          'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
+          'http://127.0.0.1:8000/json/');
       var response = await http.get(
           url,
           headers: {"Content-Type": "application/json"},
@@ -46,6 +47,12 @@ class _ProductPageState extends State<ProductPage> {
           break;
         case 1:
           // Navigate to Katalog Page
+          break;
+        case 2:
+          Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ForumPage()),
+              );
           break;
         // Handle other cases for Chat and Profile
         case 3:
