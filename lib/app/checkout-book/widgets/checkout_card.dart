@@ -47,7 +47,8 @@ class _OrderCardState extends State<OrderCard> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              elevation: 4,
+              elevation: 0.5,
+              color: Colors.yellow.shade200,
               child: InkWell(
                 child: Container(
                   padding: const EdgeInsets.all(12),
@@ -74,19 +75,45 @@ class _OrderCardState extends State<OrderCard> {
                           Text(
                             _truncateString(widget.item.name, 30),
                             textAlign: TextAlign.left,
-                            style: const TextStyle(color: Colors.black87),
+                            style: const TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            "Author: ${widget.item.author}",
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(color: Colors.black54),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.person_2_rounded,
+                                size: 15,
+                                color: Colors.grey,
+                              ),
+                              Text(
+                                "  ${_truncateString(widget.item.author, 25)}",
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Harga: ${widget.item.price}",
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(color: Colors.black54),
+
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.payments_rounded,
+                                size: 15,
+                                color: Colors.grey,
+                              ),
+                              Text(
+                                "  Rp${widget.item.price},00",
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,),
+                              ),
+
+                            ],
                           ),
                           Row(
                             children: [
@@ -100,7 +127,10 @@ class _OrderCardState extends State<OrderCard> {
                               Text(
                                 "$_currentAmount",
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(color: Colors.black54),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.remove_circle_outline),

@@ -45,6 +45,7 @@ class _BalanceCardState extends State<BalanceCard> {
       padding: const EdgeInsets.all(16.0), // Add padding here
       child: Container(
         alignment: AlignmentDirectional.bottomCenter,
+
         child: Column(
           children: [
             Column(
@@ -57,13 +58,21 @@ class _BalanceCardState extends State<BalanceCard> {
                         "Saldo",
                         style: TextStyle(
                           color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const Spacer(),
+                      Icon(
+                        Icons.wallet,
+                        size: 25,
+                      ),
                       Text(
-                        "${widget.data.balance}",
+                        "  Rp${widget.data.balance},00",
                         style: const TextStyle(
                           color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       )
                     ],
@@ -76,6 +85,11 @@ class _BalanceCardState extends State<BalanceCard> {
                   height: 30,
                   width: double.infinity,
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow[700],
+                        textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold)),
                     onPressed: (widget.data.amount != 0 && widget.data.balance >= widget.data.price)
                         ? () {
                             showModalBottomSheet<void>(
@@ -168,7 +182,10 @@ class _BalanceCardState extends State<BalanceCard> {
                             );
                           }
                         : null,
-                    child: const Text('Bayar Pesanan'),
+                    child: const Text('Bayar Pesanan',
+                        style: TextStyle(
+                          color: Colors.black
+                        ),),
                   ),
                 )
               ],

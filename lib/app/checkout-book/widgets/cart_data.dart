@@ -27,29 +27,56 @@ class _CartCardState extends State<CartCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2.0,
-      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      color: Colors.yellow.shade200,
+      elevation: 0.5,
+      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-              const Text(
-                'Daftar Pembelian',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+               Container(
+                 alignment: Alignment.centerLeft,
+                child: const Text(
+                  'Daftar Pembelian',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             // Display Product ID and Amount in a Row
             Row(
               children: [
-                Text('Amount: ${widget.cartData.amount}'),
+                const Icon(
+                  Icons.shopping_cart_rounded,
+                  size: 20,
+                  color: Colors.grey,
+                ),
+                Text('  ${widget.cartData.amount}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                  ),
+                ),
+                // Display Price separately
+                Container(
+                  width: 10,
+                ),
+                const Icon(
+                  Icons.payments_rounded,
+                  size: 20,
+                  color: Colors.grey,
+                ),
+                Text('  Rp${widget.cartData.price},00',
+                style: const TextStyle(
+
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),),
+              // Add other widgets here if needed
               ],
             ),
-            // Display Price separately
-            Text('Price: Rp${widget.cartData.price},00'),
-            // Add other widgets here if needed
           ],
         ),
       ),
