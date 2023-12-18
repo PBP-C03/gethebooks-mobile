@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:gethebooks/authentication/register.dart';
 import 'package:gethebooks/screens/menu.dart'; 
 import 'package:gethebooks/authentication/user.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -16,7 +17,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  double _position = 500; // Awalnya di luar layar
+  double _position = 500; 
+  bool _obscureText = true; 
   
   @override
   void initState() {
@@ -26,6 +28,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       setState(() {
         _position = 0; // Geser ke posisi akhir
       });
+    });
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
     });
   }
 
@@ -72,13 +80,14 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow,
       body: AnimatedContainer(
         duration: Duration(milliseconds: 500), // Durasi animasi
         curve: Curves.easeOut, // Tipe animasi
         transform: Matrix4.translationValues(0, _position, 0), // Transformasi posisi  
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          color: Colors.yellow[100], // Light yellow background
+          color: Colors.yellow, // Light yellow background
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -113,7 +122,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
-                obscureText: true,
+                obscureText: _obscureText, // Gunakan variabel _obscureText
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -121,6 +130,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     borderRadius: BorderRadius.circular(20),
                   ),
                   hintText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: _togglePasswordVisibility,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -130,8 +145,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   onPressed: () {
                     // Forgot Password logic...
                   },
-                  child: Text('Forgot Password?',
-                      style: TextStyle(color: Colors.blue[800])),
+                  child: const Text('Lupa Password?',
+                      style: TextStyle(color: Colors.black)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -146,13 +161,13 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 ),
                 child: const Text(
                   'Login',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 20),
               const Text(
-                'Or continue with social account',
-                style: TextStyle(color: Colors.black),
+                'Atau lanjutkan dengan Akun Sosial Media kamu',
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Row(
@@ -162,7 +177,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     onPressed: () {
                       // Google login logic...
                     },
-                    icon: const Icon(Icons.add),
+                    icon: Image.asset('assets/images/GoogleLogo.png', height: 24, width: 24,),
                     label: const Text('Google'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.white,
@@ -176,7 +191,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     onPressed: () {
                       // Facebook login logic...
                     },
-                    icon: const Icon(Icons.add),
+                    icon: Image.asset('assets/images/facebookLogo.png', height: 20, width: 20,),
                     label: const Text('Facebook'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.white,
@@ -191,10 +206,13 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               const Spacer(),
               TextButton(
                 onPressed: () {
-                  // Register logic...
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterPage()),
+                  );
                 },
-                child: Text('Don\'t have an account? REGISTER',
-                    style: TextStyle(color: Colors.blue[800])),
+                child: const Text('Tidak Punya Akun? DAFTAR AKUN',
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
               ),
             ],
           ),

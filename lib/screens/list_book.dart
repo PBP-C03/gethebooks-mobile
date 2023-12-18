@@ -66,8 +66,10 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+          backgroundColor: Colors.yellow[100],
           appBar: AppBar(
-          title: const Text('Katalog Buku'),
+          title: const Text('Katalog Buku', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+          backgroundColor: Colors.yellow,
           ),
 
         bottomNavigationBar: CustomBottomNavigationBar(
