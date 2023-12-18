@@ -25,8 +25,11 @@ class _DetailBookPageState extends State<DetailBookPage> {
   }
   
   Future<List<Review>> fetchReview() async {
+    // var url = Uri.parse(
+    //     'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/'
+    // );
     var url = Uri.parse(
-        'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/'
+      'http://127.0.0.1/book/${book.pk}/get-reviews/'
     );
     var response = await http.get(url, headers: {"Content-Type": "application/json"},
     );

@@ -108,7 +108,8 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final response = await request.postJson(
-                            "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/create-review-flutter/",
+                            // "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/create-review-flutter/",
+                            "http://127.0.0.1/book/${book.pk}/create-review-flutter/",
                             jsonEncode(<String, String>{
                               'rating': _rating.toString(),
                               'review': _review,
