@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/authentication/login.dart';
 import 'package:gethebooks/screens/menu.dart';
+import 'package:gethebooks/widgets/splashscreen.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -24,9 +25,10 @@ class MyApp extends StatelessWidget {
                 theme: ThemeData(
                     colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
                     useMaterial3: true,
+                    fontFamily: 'Poppins'
                 ),
                 debugShowCheckedModeBanner: false,
-                home: const LoginPage(),
+                home: SplashScreen(),
                 ),
         );
     }

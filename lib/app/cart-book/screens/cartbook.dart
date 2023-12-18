@@ -198,7 +198,7 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: const Text(
           'Keranjang',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.yellow,
       ),
@@ -462,7 +462,8 @@ class _CartPageState extends State<CartPage> {
                           'Checkout',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold
                           ),
                         ),
                       ),

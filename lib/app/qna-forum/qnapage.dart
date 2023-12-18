@@ -108,8 +108,10 @@ class _ForumPageState extends State<ForumPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow[100],
       appBar: AppBar(
-        title: const Text('QnA Forum'),
+        title: const Text('QnA Forum', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.yellow,
       ),
 
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -117,7 +119,6 @@ class _ForumPageState extends State<ForumPage> {
         onItemTapped: (index) => _onItemTapped(index, context),
       ),
 
-      backgroundColor: const Color(0xFFFAF2D3), // Warna latar belakang
       body: Column(
         children: [
               Padding(

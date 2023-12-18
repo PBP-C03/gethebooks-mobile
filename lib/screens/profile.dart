@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gethebooks/app/checkout-book/widgets/nota_card.dart';
 import 'package:gethebooks/app/upload-book/models/uploadbook.dart';
 import 'package:gethebooks/app/upload-book/screens/upload.dart';
+import 'package:gethebooks/authentication/login.dart';
 import 'package:gethebooks/authentication/user.dart';
 import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/list_book.dart';
@@ -135,7 +136,28 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
 
+    void _handleLogout() async {
+      var response = await http.post(
+        Uri.parse(
+            'http://127.0.0.1:8000/auth/logout/'), 
+        headers: {"Content-Type": "application/json"},
+      );
+
+      // Check if logout is successful
+      if (response.statusCode == 200) {
+        user = UserData(isLoggedIn: false, username: "guest");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      } else {
+        // If logout failed, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logout failed. Please try again.')),
+        );
+      }
+    }
+
     return Scaffold(
+      backgroundColor: Colors.yellow[100],
       appBar: AppBar(
         title: const Text('Pembayaran', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.yellow,
@@ -168,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundColor: Colors.yellow,
                             child: Text(
                               profileData.name.substring(0, 3).toUpperCase(), 
-                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.normal ,color: Colors.black),
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold ,color: Colors.black),
                             ),
                           ),
                           const SizedBox(height: 10,),
@@ -176,10 +198,25 @@ class _ProfilePageState extends State<ProfilePage> {
                             'Hi! ${user.username}',
                             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: ElevatedButton(
+                                onPressed: _handleLogout,
+                                child: Text('Logout'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red, // Logout button color
+                                  onPrimary: Colors.white, // Logout text color
+                                ),
+                              ),
+                            ),
+                          ),
                           ProfileCard(profileData.name, profileData.balance),
                           ElevatedButton(
                             onPressed: () => showAddBookBottomSheet(context),
                             child: Text('Upload Your Book'),
+                            style: ElevatedButton.styleFrom(primary: Colors.blue, onPrimary: Colors.white),
                           ),
                         ],
                       ),
@@ -191,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(left: 20.0),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "My Book",
+                  "User Book",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -323,9 +360,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20,),
             ],
           ),
         ),
