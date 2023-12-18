@@ -9,7 +9,8 @@ import 'package:gethebooks/models/book.dart';
 
 class ReviewFormPage extends StatefulWidget {
   final Book book;
-  const ReviewFormPage(this.book, {super.key});
+  final String username;
+  const ReviewFormPage(this.book, this.username, {super.key});
 
   @override
   State<ReviewFormPage> createState() => _ReviewFormPageState();
@@ -17,11 +18,13 @@ class ReviewFormPage extends StatefulWidget {
 
 class _ReviewFormPageState extends State<ReviewFormPage> {
   late Book book;
+  late String username;
 
   @override
   void initState() {
     super.initState();
     book = widget.book;
+    username = widget.username;
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -123,7 +126,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailBookPage(book: book)
+                                  builder: (context) => DetailBookPage(book: book, username: username)
                               ),
                           );
                         } else {

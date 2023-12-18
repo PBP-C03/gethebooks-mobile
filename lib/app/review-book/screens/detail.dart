@@ -7,8 +7,9 @@ import '../widgets/review_card.dart';
 
 class DetailBookPage extends StatefulWidget {
   final Book book;
+  final String username;
 
-  const DetailBookPage({super.key, required this.book});
+  const DetailBookPage({super.key, required this.book, required this.username});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -17,11 +18,13 @@ class DetailBookPage extends StatefulWidget {
 
 class _DetailBookPageState extends State<DetailBookPage> {
   late Book book;
+  late String username;
 
   @override
   void initState() {
     super.initState();
     book = widget.book;
+    username = widget.username;
   }
   
   Future<List<Review>> fetchReview() async {
@@ -59,7 +62,10 @@ class _DetailBookPageState extends State<DetailBookPage> {
               child: Image.network(book.fields.image, fit: BoxFit.cover),
             ),
           );
+
           Widget reviewWidget;
+          bool hasReview = false;
+          int totalRating = 0;
           List<Review> reviews = snapshot.data!;
           // ignore: unnecessary_null_comparison
           if (null == reviews) { // review section
@@ -89,6 +95,10 @@ class _DetailBookPageState extends State<DetailBookPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: reviews.map((Review review) {
+                          if (review.fields.username == username) {
+                            hasReview = true;
+                          }
+                          totalRating += review.fields.rating;
                           return ReviewCard(review);
                         }).toList(),
                       ),
@@ -96,43 +106,40 @@ class _DetailBookPageState extends State<DetailBookPage> {
               );
             }
           }
-          Widget filterWidget;
-          filterWidget = const Text(
-              "filter widget card"
-          );
+
+          List<Widget> bookUtilsWidgets = [];
+          if (!hasReview) {
+            bookUtilsWidgets.add(ElevatedButton(onPressed: () {}, child: const Text('Add Review')));
+          }
+          bookUtilsWidgets.add(ElevatedButton(onPressed: () {}, child: const Text('Add To Cart')));
+
+          List<Widget> filterWidgets = [];
+          filterWidgets.add(ElevatedButton(onPressed: () {}, child: const Text('All')));
+          for (int i = 1; i <= 5; i++) {
+            filterWidgets.add(ElevatedButton(onPressed: () {}, child: Text(i.toString())));
+          }
+
           return Column(
             children: [
               Expanded(child: imageWidget),
-              const Text(
-                "Book Title"
+              Text(
+                book.fields.title
               ),
-              const Text(
-                "Book Author"
+              Text(
+                book.fields.author
               ),
-              const Text(
-                "Book Price"
+              Text(
+                book.fields.price.toString()
               ),
-              const Text(
-                "Star, 4.5 / 5.0 (289)"
+              Text(
+                "${Icons.star} ${totalRating / reviews.length} / 5.0 (${reviews.length})"
               ),
-              const Row(
-                children: [
-                  Text(
-                    "Add review Button"
-                  ),
-                  Text(
-                    "Add to Cart Button"
-                  ),
-                ],
+              Row(
+                children: bookUtilsWidgets,
               ),
-              const Row(
-                children: [
-                  Text(
-                    "filter review by rating card"
-                  )
-                ],
+              Row(
+                children: filterWidgets,
               ),
-              Expanded(child: filterWidget),
               Expanded(child: reviewWidget),
             ],
           );
