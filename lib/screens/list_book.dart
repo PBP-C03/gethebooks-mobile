@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/menu.dart';
-import 'package:gethebooks/screens/navbar.dart';
+import 'package:gethebooks/widgets/navbar.dart';
+import 'package:gethebooks/screens/profile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:gethebooks/models/book.dart';
-import 'package:gethebooks/app/review-book/screens/detail.dart';
 
 class ProductPage extends StatefulWidget {
   final String username;
-
   const ProductPage({Key? key, required this.username}) : super(key: key);
 
   @override
@@ -17,11 +17,9 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   Future<List<Book>> fetchProduct() async {
-      // var url = Uri.parse(
-      //     'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
+      // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
       var url = Uri.parse(
-        'http://127.0.0.1/json/'
-      );
+          'http://127.0.0.1:8000/json/');
       var response = await http.get(
           url,
           headers: {"Content-Type": "application/json"},
@@ -39,25 +37,44 @@ class _ProductPageState extends State<ProductPage> {
       }
       return list_product;
   }
+  void _onItemTapped(int index, BuildContext context) {
+      switch (index) {
+        case 0:
+          Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage(username: widget.username)),
+              );
+          break;
+        case 1:
+          // Navigate to Katalog Page
+          break;
+        case 2:
+          Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ForumPage()),
+              );
+          break;
+        // Handle other cases for Chat and Profile
+        case 3:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage(username: widget.username)),
+          );  
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+          backgroundColor: Colors.yellow[100],
           appBar: AppBar(
-          title: const Text('Katalog Buku'),
+          title: const Text('Katalog Buku', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+          backgroundColor: Colors.yellow,
           ),
 
         bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: 1, // Set to 1 for Katalog
-          onItemTapped: (index) {
-            if (index == 0) {
-              // If we're tapping the 'Katalog' button, navigate to the catalog page
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MyHomePage(username: widget.username)),
-              );
-            }
-          },
+          onItemTapped: (index) => _onItemTapped(index, context),
         ),
           
           body: FutureBuilder(
@@ -101,23 +118,11 @@ class _ProductPageState extends State<ProductPage> {
                           }
 
                           return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetailBookPage(
-                                    book: book,
-                                    filter: 0,
-                                    username: widget.username,
-                                  ),
-                                ),
-                              );
-                            },
                             child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30), // Rounded corners for the card
-                            ),
-                            margin: const EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30), // Rounded corners for the card
+                              ),
+                              margin: const EdgeInsets.all(8),
                               child: Column(
                                 children: [
                                   const SizedBox(height: 10),
@@ -159,7 +164,7 @@ class _ProductPageState extends State<ProductPage> {
                                   ),
                                 ],
                               ),
-                            )
+                            ),
                           );
                         },
                       );

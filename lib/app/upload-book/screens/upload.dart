@@ -1,95 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:gethebooks/app/upload-book/models/uploadbook.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
-class MyBooksPage extends StatefulWidget {
-  const MyBooksPage({Key? key}) : super(key: key);
+class AddBookBottomSheet extends StatelessWidget {
+  final Function(Map<String, dynamic>) uploadBook;
 
-  @override
-  _MyBooksPageState createState() => _MyBooksPageState();
-}
-
-class _MyBooksPageState extends State<MyBooksPage> {
-  late Future<List<Uploadbook>> futureUploadbooks;
-
-  @override
-  void initState() {
-    super.initState();
-    futureUploadbooks = fetchUploadbooks();
-  }
-
-  Future<List<Uploadbook>> fetchUploadbooks() async {
-    // Replace with your actual API endpoint
-    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook-json/';
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      return uploadbookFromJson(response.body);
-    } else {
-      throw Exception('Failed to load upload books');
-    }
-  }
+  const AddBookBottomSheet({Key? key, required this.uploadBook}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Books'),
-        actions: <Widget>[
-          // Top Up button
-          TextButton(
-            onPressed: () {
-              // Implement Top Up functionality
-            },
-            child: const Text('Top Up', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-      body: FutureBuilder<List<Uploadbook>>(
-        future: futureUploadbooks,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No books uploaded yet'));
-          }
+    final _formKey = GlobalKey<FormState>();
+    String isbn = '';
+    String title = '';
+    String author = '';
+    String year = '';
+    String publisher = '';
+    String image = '';
+    String price = '';
+    String stocks = '';
 
-          return ListView(
-            children: snapshot.data!.map((uploadbook) {
-              return Card(
-                margin: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  leading: Image.network(uploadbook.fields.image, width: 100),
-                  title: Text(uploadbook.fields.title),
-                  subtitle: Text('Author: ${uploadbook.fields.author}\nPrice: IDR ${uploadbook.fields.price}\nStocks: ${uploadbook.fields.stocks}'),
-                  isThreeLine: true,
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      // Implement Delete functionality
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                    ),
-                    child: const Text('Delete'),
-                  ),
-                ),
-              );
-            }).toList(),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement add book functionality
-        },
-        child: const Icon(Icons.add),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(labelText: 'ISBN'),
+              onChanged: (value) => isbn = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Title'),
+              onChanged: (value) => title = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Author'),
+              onChanged: (value) => author = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Year'),
+              onChanged: (value) => year = value,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Publisher'),
+              onChanged: (value) => publisher = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Link Image'),
+              onChanged: (value) => image = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Price'),
+              onChanged: (value) => price = value,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Stocks'),
+              onChanged: (value) => stocks = value,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter ISBN';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  Map<String, dynamic> bookData = {
+                    "isbn": isbn,
+                    "title": title,
+                    "author": author,
+                    "year": year,
+                    "publisher": publisher,
+                    "image": image,
+                    "price": price,
+                    "stocks": stocks,
+                  };
+                  uploadBook(bookData);
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(home: MyBooksPage()));
 }
