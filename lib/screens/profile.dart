@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/checkout-book/widgets/nota_card.dart';
@@ -61,6 +63,44 @@ class _ProfilePageState extends State<ProfilePage> {
     return orderData;
   }
 
+  Future<void> deleteBook(int bookId) async {
+    final request = context.read<CookieRequest>();
+    var response = await request.postJson(
+      'http://127.0.0.1:8000/uploadbook/delete-book-json/',
+      jsonEncode({'id': bookId}),
+    );
+
+    if (response["status"] == "success") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Book deleted successfully')),
+      );
+      setState(() {
+        uploadedBooks.removeWhere((book) => book.pk == bookId);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete book')),
+      );
+    }
+  }
+
+  Future<void> updateStock(int bookId, bool isAdding) async {
+    final request = context.read<CookieRequest>();
+    var endpoint = isAdding ? 'tambah-stocks-json/' : 'kurang-stocks-json/';
+    var response = await request.postJson(
+      'http://127.0.0.1:8000/uploadbook/$endpoint',
+      jsonEncode({'id': bookId}),
+    );
+
+    // Refresh daftar buku setelah update stok
+    fetchUploadedbooks().then((updatedBooks) {
+      setState(() {
+        uploadedBooks = updatedBooks;
+      });
+    });
+
+  }
+
   Future<void> uploadBook(Map<String, dynamic> bookData) async {
     final request = context.read<CookieRequest>();
     var response = await request.postJson(
@@ -96,7 +136,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<List<Uploadbook>> fetchUploadedbooks() async {
-    // Replace with your actual API endpoint
     const url = 'http://127.0.0.1:8000/uploadbook-json/';
     final response = await http.get(Uri.parse(url));
 
@@ -143,13 +182,11 @@ class _ProfilePageState extends State<ProfilePage> {
         headers: {"Content-Type": "application/json"},
       );
 
-      // Check if logout is successful
       if (response.statusCode == 200) {
         user = UserData(isLoggedIn: false, username: "guest");
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       } else {
-        // If logout failed, show error message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logout failed. Please try again.')),
         );
@@ -266,7 +303,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                     height: 180.0,
                                     width: 120.0,
                                     errorBuilder: (context, error, stackTrace) {
-                                      // Tampilkan ikon dummy jika gambar gagal dimuat
                                       return const Icon(Icons.book, size: 120.0, color: Colors.grey);
                                     },
                                   ),
@@ -302,6 +338,37 @@ class _ProfilePageState extends State<ProfilePage> {
                                         style: const TextStyle(fontSize: 14.0,),
                                       ),
                                     ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => updateStock(uploadedBooks[index].pk, true),
+                                  child: Icon(Icons.add),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => updateStock(uploadedBooks[index].pk, false),
+                                  child: Icon(Icons.remove),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red, size: 30,),
+                                  onPressed: () => showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) => AlertDialog(
+                                      title: const Text('Konfirmasi Hapus'),
+                                      content: const Text('Apakah Anda yakin ingin menghapus buku ini?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: const Text('Batal'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            deleteBook(uploadedBooks[index].pk);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Hapus'),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
