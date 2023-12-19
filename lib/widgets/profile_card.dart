@@ -38,7 +38,7 @@ class _ProfileCardState extends State<ProfileCard> {
       "data": "$_saldo",
     };
     try {
-      response = await request.post("http://127.0.0.1:8000/topup/", json.encode(requestBody));
+      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/topup/", json.encode(requestBody));
     } catch (e) {
     }
     setState(() {

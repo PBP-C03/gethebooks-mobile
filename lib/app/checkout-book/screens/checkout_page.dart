@@ -39,6 +39,7 @@ class _OrderPageState extends State<OrderPage> {
     for (var data in orderRaw) {
       var fields = data["fields"];
       var bookRaw = await request.get("http://127.0.0.1:8000/checkout/get-book/${fields["book"]}/");
+      print(bookRaw);
       var bookFields = bookRaw[0]["fields"];
       orderData.add(
         OrderItem(
