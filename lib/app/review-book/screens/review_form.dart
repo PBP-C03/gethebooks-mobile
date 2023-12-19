@@ -34,16 +34,22 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+      primary: const Color.fromRGBO(255, 220, 0, 1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      shadowColor: Colors.black,
+    );
 
     return Scaffold(
+      backgroundColor: Colors.yellow[100],
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Add Review Form',
-          ),
+        title: const Text(
+          'Detail Buku',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.black87,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.yellow,
       ),
       body: Form(
         key: _formKey,
@@ -60,6 +66,8 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
+                    fillColor: Colors.white,
+                    filled: true,
                   ),
                   onChanged: (String? value) {
                     setState(() {
@@ -86,6 +94,8 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   onChanged: (String? value) {
                     setState(() {
@@ -105,14 +115,12 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black87),
-                    ),
+                    style: buttonStyle,
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final response = await request.postJson(
                             // "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/create-review-flutter/",
-                            "http://127.0.0.1/book/${book.pk}/create-review-flutter/",
+                            "http://127.0.0.1:8000/book/${book.pk}/create_review_flutter/",
                             jsonEncode(<String, String>{
                               'rating': _rating.toString(),
                               'review': _review,
@@ -141,7 +149,10 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                     },
                     child: const Text(
                       "Save",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
