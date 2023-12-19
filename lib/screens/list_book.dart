@@ -117,51 +117,53 @@ class _ProductPageState extends State<ProductPage> {
                             imageWidget = const SizedBox(height: 0);
                           }
 
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30), // Rounded corners for the card
-                            ),
-                            margin: const EdgeInsets.all(8),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 10),
+                          return InkWell(
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30), // Rounded corners for the card
+                              ),
+                              margin: const EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10),
 
-                                Expanded(child: imageWidget), // Display book image with padding
+                                  Expanded(child: imageWidget), // Display book image with padding
 
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        book.fields.title,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        "Author: ${book.fields.author}",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        "Rp ${book.fields.price}",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        "Stok: ${book.fields.stocks}",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          book.fields.title,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "Author: ${book.fields.author}",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "Rp ${book.fields.price}",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "Stok: ${book.fields.stocks}",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },
