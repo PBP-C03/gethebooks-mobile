@@ -33,7 +33,7 @@ class _BalanceCardState extends State<BalanceCard> {
     "layanan": _layanan,
     };
     try{
-      response = await request.post("http://127.0.0.1:8000/checkout/pay/", json.encode(requestBody));
+      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/pay/", json.encode(requestBody));
     // ignore: empty_catches
     }catch(e){}
     widget.status!();
