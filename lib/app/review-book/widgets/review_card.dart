@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/review-book/models/review.dart';
+import 'package:intl/intl.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,10 @@ class ReviewCard extends StatelessWidget {
     while (ratings.length != 5) {
       ratings.add(const Icon(Icons.star_border, size: 15));
     }
+
+    DateTime dateTime = review.fields.dateAdded;
+    DateFormat dateFormat = DateFormat("dd-MM-yyyy");
+    String dateAdded = dateFormat.format(dateTime);
 
     return Center(
       child: Card(
@@ -48,7 +53,10 @@ class ReviewCard extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        review.fields.dateAdded.toString(),
+                        dateAdded,
+                        style: const TextStyle(
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ),
