@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.yellow[100],
       appBar: AppBar(
-        title: const Text('Pembayaran', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text('Profile', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.yellow,
       ),
       bottomNavigationBar: CustomBottomNavigationBar(

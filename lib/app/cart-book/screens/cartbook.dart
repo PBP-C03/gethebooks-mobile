@@ -350,7 +350,7 @@ class _CartPageState extends State<CartPage> {
                                               onPressed: () {
                                                 tambahAmount(bookcart.pk);
                                               }),
-                                          Text('${bookcart.fields.amount}'),
+                                          Text('${bookcart.fields.amount}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
                                           IconButton(
                                               icon: const Icon(Icons.remove_circle_outline),
                                               onPressed: () {
