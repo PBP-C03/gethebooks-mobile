@@ -73,7 +73,7 @@ class _OrderCardState extends State<OrderCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _truncateString(widget.item.name, 30),
+                            _truncateString(widget.item.name, 25),
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 color: Colors.black87,
@@ -138,6 +138,12 @@ class _OrderCardState extends State<OrderCard> {
                                   _updateAmount(widget.item,-1,request);
                                 },
                               ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  _delete(widget.item,request);
+                                },
+                              ),
                             ],
                           )
                         ],
@@ -153,19 +159,31 @@ class _OrderCardState extends State<OrderCard> {
   Future<void> _updateAmount(OrderItem item,int delta, var request) async {
     var response;
     if (delta > 0){
-          try{
-      response = await request.post("http://127.0.0.1:8000/checkout/inc-book/${item.book}/",json.encode({}));
+        try{
+      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/inc-book/${item.book}/",json.encode({}));
       // ignore: empty_catches
       }catch(e){}
     }else{
       try{
-      response = await request.post("http://127.0.0.1:8000/checkout/dec-book/${item.book}/",json.encode({}));
+      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/dec-book/${item.book}/",json.encode({}));
       // ignore: empty_catches
       }catch(e){}
     }
     final newAmount = _currentAmount + delta;
     setState(() {
       _currentAmount = newAmount.clamp(0, 999);
+      widget.changed!();
+    });
+  }
+
+  Future<void> _delete(OrderItem item, var request) async {
+    var response;
+    try{
+    response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/del-book/${item.book}/",json.encode({}));
+    // ignore: empty_catches
+    }catch(e){}
+    setState(() {
+      _currentAmount = 0;
       widget.changed!();
     });
   }
