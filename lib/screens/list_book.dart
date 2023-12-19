@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/qna-forum/qnapage.dart';
+import 'package:gethebooks/app/review-book/screens/detail.dart';
 import 'package:gethebooks/screens/menu.dart';
 import 'package:gethebooks/widgets/navbar.dart';
 import 'package:gethebooks/screens/profile.dart';
@@ -118,6 +119,10 @@ class _ProductPageState extends State<ProductPage> {
                           }
 
                           return InkWell(
+                            onTap: () {Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => DetailBookPage(book: book, filter: 0, username: widget.username)),
+                            );},
                             child: Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30), // Rounded corners for the card

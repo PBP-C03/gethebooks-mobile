@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
@@ -59,6 +60,13 @@ class _DetailBookPageState extends State<DetailBookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow[100],
+      appBar: AppBar(
+        title: const Text(
+          'Detail Buku',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.yellow,
+      ),
       body: FutureBuilder(
         future: fetchReview(),
         builder: (context, AsyncSnapshot snapshot) {
@@ -79,6 +87,9 @@ class _DetailBookPageState extends State<DetailBookPage> {
 
           for (Review review in reviews) {
             totalRating += review.fields.rating;
+            if (review.fields.username == username) {
+              hasReview = true;
+            }
           }
 
           if (reviews.isEmpty) {
@@ -97,35 +108,46 @@ class _DetailBookPageState extends State<DetailBookPage> {
                   Text(
                     "Tidak ada data review",
                     style:
-                    TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                    TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   SizedBox(height: 8),
                 ],
               );
             } else {
-              reviewWidget = ListView.builder(
-                itemCount: reviews.length,
-                itemBuilder: (_, index) =>
-                    Container(
+              List<Review> filteredReviews = filter != 0 ? reviews.where((review) => review.fields.rating == filter).toList() : reviews.toList();
+              if (filteredReviews.isEmpty) {
+                reviewWidget = const Column(
+                  children: [
+                    Text(
+                      "Tidak ada data review",
+                      style:
+                      TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                );
+              } else {
+                reviewWidget = ListView.builder(
+                  itemCount: filteredReviews.length,
+                  itemBuilder: (_, index) {
+                    Review review = filteredReviews[index];
+                    return Container(
                       margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12
+                        horizontal: 16,
                       ),
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.only(
+                          left: 20.0, top: 5.0, right: 20.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: reviews
-                            .where((review) => review.fields.rating == filter || filter == 0)
-                            .map((Review review) {
-                          if (review.fields.username == username) {
-                            hasReview = true;
-                          }
-                          totalRating += review.fields.rating;
-                          return ReviewCard(review);
-                        }).toList(),
+                        children: [
+                          ReviewCard(review),
+                        ],
                       ),
-                    ),
-              );
+                    );
+                  }
+                );
+              }
             }
           }
 
@@ -237,22 +259,4 @@ class _DetailBookPageState extends State<DetailBookPage> {
       ),
     );
   }
-}
-
-void main() {
-  var json = {
-    "model": "book.book",
-    "pk": 25,
-    "fields": {
-      "isbn": "0439095026",
-      "title": "Tell Me This Isn't Happening",
-      "author": "Robynn Clairday",
-      "year": 1999,
-      "publisher": "Scholastic",
-      "image": "http://images.amazon.com/images/P/0439095026.01.LZZZZZZZ.jpg",
-      "price": 1003000,
-      "stocks": 19
-    }
-  };
-  runApp(MaterialApp(home: DetailBookPage(book: Book.fromJson(json), filter: 0, username: 'tes')));
 }
