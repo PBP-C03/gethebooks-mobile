@@ -23,6 +23,12 @@ class ShopItem {
 class MyHomePage extends StatelessWidget {
   final String username;
   final TextEditingController searchController = TextEditingController();
+  final List<String> carouselItems = [
+    'assets/images/boy-reading-a-book.png',
+    'assets/images/boy-sitting-on-knees-and-reading-book.png',
+    'assets/images/young-woman-has-an-idea.png',
+    'assets/images/searching-for-idea.png' 
+  ];
 
   // const MyHomePage({Key? key}) : super(key: key);
   MyHomePage({Key? key, required this.username}) : super(key: key);
@@ -113,87 +119,89 @@ class MyHomePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(15.0), // Set padding dari halaman
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 // Widget untuk menampilkan children secara vertikal
                 children: <Widget>[
+                  const SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Selamat Datang,',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 35.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Selamat Datang,',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                '${user.username}!',
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: 15.0), // Berikan ruang di sebelah kiri
+                        padding: const EdgeInsets.only(right: 20.0),
                         child: IconButton(
-                          icon: const Icon(
+                        icon: const Icon(
                             Icons.shopping_cart,
                             size: 35,
                           ),
                           onPressed: () {
-                            // Navigate to the cart page
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => CartPage()),
+                              MaterialPageRoute(builder: (context) => CartPage()),
                             );
                           },
                         ),
-                      ),
-                    ],
-                  ),
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          '${user.username}!',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                      )
                     ],
                   ),
 
                   Container(
-                    margin: const EdgeInsets.all(16.0), // Memberikan jarak antara container dan widget lainnya
-                    width: MediaQuery.of(context).size.width - 32, // Mengambil lebar layar dan mengurangi margin
+                    margin: const EdgeInsets.all(16.0),
+                    width: MediaQuery.of(context).size.width - 32,
                     height: 250,
                     decoration: BoxDecoration(
-                      color:
-                          Colors.yellow, // Ganti dengan warna yang diinginkan
-                      borderRadius: BorderRadius.circular(
-                          30), // Memberikan sudut yang bulat
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.circular(30),
                       boxShadow: [
-                        // Menambahkan shadow
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5), // Warna shadow
-                          spreadRadius:
-                              0, // Menentukan seberapa jauh shadow menyebar dari setiap sisi box
-                          blurRadius: 10, // Kekaburan shadow
-                          offset: const Offset(0,
-                              5), // Posisi shadow secara horizontal dan vertikal
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0,
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
                         ),
                       ],
                     ),
-
-                    child: const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                          // Isi child dengan konten yang diinginkan, misalnya gambar dan teks
+                    child: PageView.builder(
+                      itemCount: carouselItems.length,
+                      controller: PageController(viewportFraction: 0.8),
+                      itemBuilder: (BuildContext context, int itemIndex) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            image: DecorationImage(
+                              image: AssetImage(carouselItems[itemIndex]),
+                            ),
                           ),
+                        );
+                      },
                     ),
                   ),
 
