@@ -107,6 +107,8 @@ class _ProductPageState extends State<ProductPage> {
                                 MaterialPageRoute(
                                   builder: (context) => DetailBookPage(
                                     book: book,
+                                    filter: 0,
+                                    username: widget.username,
                                   ),
                                 ),
                               );

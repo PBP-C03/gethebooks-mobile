@@ -126,7 +126,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailBookPage(book: book, username: username)
+                                  builder: (context) => DetailBookPage(book: book, filter: 0, username: username)
                               ),
                           );
                         } else {
