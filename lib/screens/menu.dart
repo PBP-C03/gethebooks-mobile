@@ -107,184 +107,181 @@ class MyHomePage extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.yellow[100], 
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: 0,
         onItemTapped: (index) => _onItemTapped(index, context),
       ),
 
       body: SingleChildScrollView(
-        child: Container(
-            color: Colors.yellow[100],
-            // Widget wrapper yang dapat discroll
-            child: Padding(
-              padding: const EdgeInsets.all(15.0), // Set padding dari halaman
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // Widget untuk menampilkan children secara vertikal
-                children: <Widget>[
-                  const SizedBox(height: 50),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 35.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Selamat Datang,',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0), // Set padding dari halaman
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // Widget untuk menampilkan children secara vertikal
+              children: <Widget>[
+                const SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 35.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Selamat Datang,',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
                               ),
-                              Text(
-                                '${user.username}!',
-                                style: const TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                            ),
+                            Text(
+                              '${user.username}!',
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: IconButton(
-                        icon: const Icon(
-                            Icons.shopping_cart,
-                            size: 35,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => CartPage()),
-                            );
-                          },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: IconButton(
+                      icon: const Icon(
+                          Icons.shopping_cart,
+                          size: 35,
                         ),
-                      )
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CartPage()),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
+
+                Container(
+                  margin: const EdgeInsets.all(16.0),
+                  width: MediaQuery.of(context).size.width - 32,
+                  height: 250,
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 0,
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
                     ],
                   ),
-
-                  Container(
-                    margin: const EdgeInsets.all(16.0),
-                    width: MediaQuery.of(context).size.width - 32,
-                    height: 250,
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 0,
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: PageView.builder(
-                      itemCount: carouselItems.length,
-                      controller: PageController(viewportFraction: 0.8),
-                      itemBuilder: (BuildContext context, int itemIndex) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.symmetric(horizontal: 5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            image: DecorationImage(
-                              image: AssetImage(carouselItems[itemIndex]),
-                            ),
+                  child: PageView.builder(
+                    itemCount: carouselItems.length,
+                    controller: PageController(viewportFraction: 0.8),
+                    itemBuilder: (BuildContext context, int itemIndex) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          image: DecorationImage(
+                            image: AssetImage(carouselItems[itemIndex]),
                           ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: 
+                    TextField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search by Title',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.white,
+                        suffixIcon: searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear, color: Colors.grey),
+                                onPressed: () {
+                                  searchController.clear();
+                                  (context as Element).markNeedsBuild();
+                                },
+                              )
+                            : const Icon(Icons.search, color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                      ),
+                      onChanged: (value) {
+                        (context as Element).markNeedsBuild();
+                      },
+                      style: TextStyle(color: Colors.black),
+                    ),
+                ),
+
+                // Horizontal ListView for books
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: SizedBox(
+                    height: 300, // Adjust the height to fit the content
+                    child: FutureBuilder<List<Book>>(
+                      future: fetchProduct(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(
+                              child: Text('No products found'));
+                        }
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final book = snapshot.data![index];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 18.0),
+                              child: BookCard(book: book),
+                            );
+                          },
                         );
                       },
                     ),
                   ),
+                ),
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: 
-                      TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Search by Title',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          filled: true,
-                          fillColor: Colors.white,
-                          suffixIcon: searchController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: Icon(Icons.clear, color: Colors.grey),
-                                  onPressed: () {
-                                    searchController.clear();
-                                    (context as Element).markNeedsBuild();
-                                  },
-                                )
-                              : const Icon(Icons.search, color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                        ),
-                        onChanged: (value) {
-                          (context as Element).markNeedsBuild();
-                        },
-                        style: TextStyle(color: Colors.black),
-                      ),
-                  ),
-
-                  // Horizontal ListView for books
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: SizedBox(
-                      height: 300, // Adjust the height to fit the content
-                      child: FutureBuilder<List<Book>>(
-                        future: fetchProduct(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                            return const Center(
-                                child: Text('No products found'));
-                          }
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              final book = snapshot.data![index];
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 18.0),
-                                child: BookCard(book: book),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  // Align(
-                  //   alignment: Alignment.bottomCenter,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(top: 20.0),
-                  //     child: ElevatedButton(
-                  //       onPressed: _handleLogout,
-                  //       child: Text('Logout'),
-                  //       style: ElevatedButton.styleFrom(
-                  //         primary: Colors.red, // Logout button color
-                  //         onPrimary: Colors.white, // Logout text color
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  
-                ],
-              ),
+                // Align(
+                //   alignment: Alignment.bottomCenter,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 20.0),
+                //     child: ElevatedButton(
+                //       onPressed: _handleLogout,
+                //       child: Text('Logout'),
+                //       style: ElevatedButton.styleFrom(
+                //         primary: Colors.red, // Logout button color
+                //         onPrimary: Colors.white, // Logout text color
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                
+              ],
             ),
           ),
       )
