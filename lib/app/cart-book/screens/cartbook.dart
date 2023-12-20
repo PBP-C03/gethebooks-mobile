@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> removeFromCart(int bookCartId) async {
     final request = context.read<CookieRequest>();
     var success = await request.postJson(
-      'http://127.0.0.1:8000/cartbook/remove-from-cart-json/',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/remove-from-cart-json/',
       jsonEncode({"id": bookCartId.toString()}),
     );
     if (success["success"]) {
@@ -99,7 +99,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> tambahAmount(int bookCartId) async {
     final request = context.read<CookieRequest>();
     var success = await request.postJson(
-      'http://127.0.0.1:8000/cartbook/tambah-amount-json/',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/tambah-amount-json/',
       jsonEncode({"tambah": bookCartId.toString()}),
     );
     if (success["success"]) {
@@ -119,7 +119,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> kurangAmount(int bookCartId) async {
     final request = context.read<CookieRequest>();
     var success = await request.postJson(
-      'http://127.0.0.1:8000/cartbook/kurang-amount-json/',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/kurang-amount-json/',
       jsonEncode({"kurang": bookCartId.toString()}),
     );
     if (success["success"]) {
@@ -139,7 +139,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> addNoteToCart(int bookCartId, String note) async {
     final request = context.read<CookieRequest>();
     var success = await request.postJson(
-      'http://127.0.0.1:8000/cartbook/add-note-json/',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/add-note-json/',
       jsonEncode({"noteid": bookCartId.toString(), "notes": note}),
     );
     if (success["success"]) {
@@ -158,7 +158,7 @@ class _CartPageState extends State<CartPage> {
 
 
   Future<List<Book>> fetchBooks() async {
-    const bookUrl = 'http://127.0.0.1:8000/json/';
+    const bookUrl = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/';
     final response = await http
         .get(Uri.parse(bookUrl), headers: {"Content-Type": "application/json"});
 
@@ -170,7 +170,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<List<Bookcart>> fetchBookcarts(request) async {
-    final response = await request.get('http://127.0.0.1:8000/bookcart-json/');
+    final response = await request.get('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/bookcart-json/');
     List<Bookcart> listBookCart = [];
     for (var d in response) {
       if (d != null) {
@@ -181,7 +181,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<Cart?> fetchCart(request) async {
-    final response = await request.get('http://127.0.0.1:8000/cart-json/');
+    final response = await request.get('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cart-json/');
     Cart? keranjang;
     for (var d in response) {
       if (d != null) {
@@ -308,6 +308,9 @@ class _CartPageState extends State<CartPage> {
                                           width: 130,
                                           height: 170,
                                           fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(Icons.book,color:Colors.grey,size: 115,);
+                                          },
                                         ),
                                       ),
                                       const SizedBox(width: 10),

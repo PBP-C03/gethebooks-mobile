@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     final String password = _passwordController.text;
 
     final request = context.read<CookieRequest>();
-    final response = await request.login("http://127.0.0.1:8000/auth/login/", {
+    final response = await request.login("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/login/", {
       'username': username,
       'password': password,
     });
