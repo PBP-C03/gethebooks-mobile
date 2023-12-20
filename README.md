@@ -13,7 +13,7 @@ http://gethebooks-c03-tk.pbp.cs.ui.ac.id/
 [![Pipeline](https://build.appcenter.ms/v0.1/apps/216f9df2-2104-4d8b-bdd6-6d6a01753a6c/branches/main/badge)](https://build.appcenter.ms/v0.1/apps/216f9df2-2104-4d8b-bdd6-6d6a01753a6c/branches/main/badge)
 
 ### Tautan Link Aplikasi
-[GeTheBooks]([https://install.appcenter.ms/orgs/PBP-C03/apps/GeTheBooks])
+[GeTheBooks]([LINK][https://install.appcenter.ms/orgs/PBP-C03/apps/GeTheBooks])
 
 
 ## Pengembang Aplikasi 🛠️
