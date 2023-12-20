@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable, unused_local_variable, prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -50,7 +52,7 @@ class _BalanceCardState extends State<BalanceCard> {
           children: [
             Column(
               children: [
-                Container(
+                SizedBox(
                   width: 330,
                   child: Row(
                     children: [
@@ -63,7 +65,7 @@ class _BalanceCardState extends State<BalanceCard> {
                         ),
                       ),
                       const Spacer(),
-                      Icon(
+                      const Icon(
                         Icons.wallet,
                         size: 25,
                       ),

@@ -1,7 +1,6 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:gethebooks/app/upload-book/models/uploadbook.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class AddBookBottomSheet extends StatelessWidget {
   final Function(Map<String, dynamic>) uploadBook;
@@ -27,7 +26,7 @@ class AddBookBottomSheet extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             TextFormField(
-              decoration: InputDecoration(labelText: 'ISBN'),
+              decoration: const InputDecoration(labelText: 'ISBN'),
               onChanged: (value) => isbn = value,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -37,7 +36,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(labelText: 'Title'),
               onChanged: (value) => title = value,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -47,7 +46,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Author'),
+              decoration: const InputDecoration(labelText: 'Author'),
               onChanged: (value) => author = value,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -57,7 +56,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Year'),
+              decoration: const InputDecoration(labelText: 'Year'),
               onChanged: (value) => year = value,
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -68,7 +67,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Publisher'),
+              decoration: const InputDecoration(labelText: 'Publisher'),
               onChanged: (value) => publisher = value,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -78,7 +77,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Link Image'),
+              decoration: const InputDecoration(labelText: 'Link Image'),
               onChanged: (value) => image = value,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -88,7 +87,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Price'),
+              decoration: const InputDecoration(labelText: 'Price'),
               onChanged: (value) => price = value,
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -99,7 +98,7 @@ class AddBookBottomSheet extends StatelessWidget {
               },
             ),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Stocks'),
+              decoration: const InputDecoration(labelText: 'Stocks'),
               onChanged: (value) => stocks = value,
               keyboardType: TextInputType.number,
               validator: (value) {

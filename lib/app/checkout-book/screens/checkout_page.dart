@@ -1,13 +1,14 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/checkout-book/widgets/cart_data.dart';
-import 'dart:convert';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:gethebooks/app/checkout-book/widgets/checkout_card.dart';
 import 'package:gethebooks/app/checkout-book/widgets/balance_card.dart';
 import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-  OrderPage({Key? key}) : super(key: key);
+  const OrderPage({Key? key}) : super(key: key);
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -39,7 +40,6 @@ class _OrderPageState extends State<OrderPage> {
     for (var data in orderRaw) {
       var fields = data["fields"];
       var bookRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-book/${fields["book"]}/");
-      print(bookRaw);
       var bookFields = bookRaw[0]["fields"];
       orderData.add(
         OrderItem(
@@ -103,7 +103,7 @@ class _OrderPageState extends State<OrderPage> {
                   return const Text("");
                 } else {
                     CartData cartData = snapshot.data!;
-                      return Container(
+                      return SizedBox(
                         height: 80,
                         child: CartCard(cartData),
                       );
@@ -115,7 +115,7 @@ class _OrderPageState extends State<OrderPage> {
                 future: orderItemFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

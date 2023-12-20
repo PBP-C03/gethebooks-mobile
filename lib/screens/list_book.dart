@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/app/review-book/screens/detail.dart';
@@ -18,7 +20,6 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   Future<List<Book>> fetchProduct() async {
-      // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
       var url = Uri.parse(
           'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
       var response = await http.get(

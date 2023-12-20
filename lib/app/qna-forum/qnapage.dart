@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison, library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/qna-forum/addquestion.dart';
@@ -65,7 +67,6 @@ class _ForumPageState extends State<ForumPage> {
   }
 
   Future<List<Question>> fetchQuestions() async {
-    // TODO: Ganti dengan endpoint API yang sesuai
     const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/question-json/';
     final response = await http.get(Uri.parse(url));
 
@@ -151,7 +152,7 @@ class _ForumPageState extends State<ForumPage> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(
+                        backgroundColor: const Color(
                             0xFFFFDC00), // Warna tombol Add Question
                         padding:
                             const EdgeInsets.all(20.0), // Ubah padding tombol
@@ -226,7 +227,7 @@ class _ForumPageState extends State<ForumPage> {
                               subtitle: Text(question.fields.content),
                               trailing: question.fields.user == question.fields.user // Asumsi 'user.id' adalah ID pengguna saat ini
                                   ? IconButton(
-                                      icon: Icon(Icons.delete),
+                                      icon: const Icon(Icons.delete),
                                       onPressed: () => deleteQuestion(question.pk),
                                     )
                                   : null,

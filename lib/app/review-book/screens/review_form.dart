@@ -35,7 +35,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-      primary: const Color.fromRGBO(255, 220, 0, 1),
+      backgroundColor: const Color.fromRGBO(255, 220, 0, 1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
