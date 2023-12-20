@@ -36,7 +36,7 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
   }
 
   Future<List<BookQuestionDetail>> fetchBooks() async {
-    const url = 'http://127.0.0.1:8000/json/'; 
+    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/'; 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       List<dynamic> booksJson = jsonDecode(utf8.decode(response.bodyBytes));

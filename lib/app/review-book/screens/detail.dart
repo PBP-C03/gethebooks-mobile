@@ -38,7 +38,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
     //     'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/'
     // );
     var url = Uri.parse(
-      'http://127.0.0.1:8000/book/${book.pk}/get-reviews/'
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/'
     );
     var response = await http.get(url, headers: {"Content-Type": "application/json"},
     );

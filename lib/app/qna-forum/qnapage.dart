@@ -34,7 +34,7 @@ class _ForumPageState extends State<ForumPage> {
   }
 
   Future<List<Book>> fetchBooks() async {
-    const url = 'http://127.0.0.1:8000/json/'; 
+    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/'; 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return bookFromJson(response.body); 
@@ -46,7 +46,7 @@ class _ForumPageState extends State<ForumPage> {
   Future<void> deleteQuestion(int questionId) async {
     final request = context.read<CookieRequest>();
     var response = await request.postJson(
-      'http://127.0.0.1:8000/qna/delete-question-json/', 
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/qna/delete-question-json/', 
       jsonEncode({"id": questionId.toString()}),
     );
 
@@ -66,7 +66,7 @@ class _ForumPageState extends State<ForumPage> {
 
   Future<List<Question>> fetchQuestions() async {
     // TODO: Ganti dengan endpoint API yang sesuai
-    const url = 'http://127.0.0.1:8000/question-json/';
+    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/question-json/';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

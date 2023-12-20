@@ -39,8 +39,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<ProfileData> fetchProfileData(var request) async {
     var profileRaw =
-        await request.get("http://127.0.0.1:8000/checkout/get-user/");
-    var balanceRaw = await request.get("http://127.0.0.1:8000/get_saldo/");
+        await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-user/");
+    var balanceRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/get_saldo/");
     var profileData = profileRaw[0]["fields"];
     var balanceData = balanceRaw[0]["fields"];
     return ProfileData(profileData["username"], balanceData["saldo"]);
@@ -48,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<List<NotaItem>> fetchNota(var request) async {
     List<NotaItem> orderData = [];
-    var notaRaw = await request.get("http://127.0.0.1:8000/checkout/get-nota/");
+    var notaRaw = await request.get("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/get-nota/");
     for (var nota in notaRaw) {
       var data = nota["fields"];
       orderData.add(NotaItem(
@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> deleteBook(int bookId) async {
     final request = context.read<CookieRequest>();
     var response = await request.postJson(
-      'http://127.0.0.1:8000/uploadbook/delete-book-json/',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/delete-book-json/',
       jsonEncode({'id': bookId}),
     );
 
@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final request = context.read<CookieRequest>();
     var endpoint = isAdding ? 'tambah-stocks-json/' : 'kurang-stocks-json/';
     var response = await request.postJson(
-      'http://127.0.0.1:8000/uploadbook/$endpoint',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/$endpoint',
       jsonEncode({'id': bookId}),
     );
 
@@ -104,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> uploadBook(Map<String, dynamic> bookData) async {
     final request = context.read<CookieRequest>();
     var response = await request.postJson(
-      'http://127.0.0.1:8000/uploadbook/upload-book-json/',
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/upload-book-json/',
       jsonEncode(bookData),
     );
 
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<List<Uploadbook>> fetchUploadedbooks() async {
-    const url = 'http://127.0.0.1:8000/uploadbook-json/';
+    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook-json/';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -178,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
     void _handleLogout() async {
       var response = await http.post(
         Uri.parse(
-            'http://127.0.0.1:8000/auth/logout/'), 
+            'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/logout/'), 
         headers: {"Content-Type": "application/json"},
       );
 
