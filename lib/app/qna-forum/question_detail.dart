@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -57,11 +59,11 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
         future: booksFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('No book data found'));
+            return const Center(child: Text('No book data found'));
           }
 
           final books = snapshot.data!;
@@ -81,22 +83,23 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
                 _buildDetailItem('Book Name', bookName, Colors.purple),
                 _buildDetailItem('Created At', widget.question.fields.createdAt.toString(), Colors.red),
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Implement action for the button (e.g., add comment)
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFFFDC00),
-                    side: BorderSide(color: Colors.black),
-                  ),
-                  child: const Text(
-                    'Add Comment',
-                    style: TextStyle(fontSize: 18, color: Colors.black), // Mengatur warna teks
-                  ),
-                ),
-              ),              ],
+              // SizedBox(
+              //   width: double.infinity,
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Implement action for the button (e.g., add comment)
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       primary: Color(0xFFFFDC00),
+              //       side: BorderSide(color: Colors.black),
+              //     ),
+              //     child: const Text(
+              //       'Add Comment',
+              //       style: TextStyle(fontSize: 18, color: Colors.black), // Mengatur warna teks
+              //     ),
+              //   ),
+              // ),             
+              ],
             ),
           );
         },

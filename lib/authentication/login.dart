@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:gethebooks/authentication/register.dart';
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     return Scaffold(
       backgroundColor: Colors.yellow,
       body: AnimatedContainer(
-        duration: Duration(milliseconds: 500), // Durasi animasi
+        duration: const Duration(milliseconds: 500), // Durasi animasi
         curve: Curves.easeOut, // Tipe animasi
         transform: Matrix4.translationValues(0, _position, 0), // Transformasi posisi  
         child: Container(
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               ElevatedButton(
                 onPressed: handleLogin, // Call the login handler
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue[300],
+                  backgroundColor: Colors.blue[300],
                   fixedSize: Size(MediaQuery.of(context).size.width - 250, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -180,8 +180,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     icon: Image.asset('assets/images/GoogleLogo.png', height: 24, width: 24,),
                     label: const Text('Google'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
+                      foregroundColor: Colors.black, backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -194,8 +193,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     icon: Image.asset('assets/images/facebookLogo.png', height: 20, width: 20,),
                     label: const Text('Facebook'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
+                      foregroundColor: Colors.black, backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),

@@ -10,7 +10,7 @@
 http://gethebooks-c03-tk.pbp.cs.ui.ac.id/
 
 ### Pipeline Status
-[![Pipeline]([Link])]([Link])
+[![Pipeline](https://build.appcenter.ms/v0.1/apps/216f9df2-2104-4d8b-bdd6-6d6a01753a6c/branches/main/badge)](https://build.appcenter.ms/v0.1/apps/216f9df2-2104-4d8b-bdd6-6d6a01753a6c/branches/main/badge)
 
 ### Tautan Link Aplikasi
 [GeTheBooks]([LINK])

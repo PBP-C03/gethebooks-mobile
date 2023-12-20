@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:gethebooks/screens/menu.dart'; // Ensure this is the correct import path
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: handleLogin, // Call the login handler
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue[300],
+                backgroundColor: Colors.blue[300],
                 fixedSize: Size(MediaQuery.of(context).size.width - 250, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -138,8 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon: const Icon(Icons.add),
                   label: const Text('Google'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
+                    foregroundColor: Colors.black, backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -152,8 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon: const Icon(Icons.add),
                   label: const Text('Facebook'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
+                    foregroundColor: Colors.black, backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),

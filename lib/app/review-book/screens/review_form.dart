@@ -35,7 +35,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-      primary: const Color.fromRGBO(255, 220, 0, 1),
+      backgroundColor: const Color.fromRGBO(255, 220, 0, 1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -119,7 +119,6 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final response = await request.postJson(
-                            // "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/create-review-flutter/",
                             "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/create_review_flutter/",
                             jsonEncode(<String, String>{
                               'rating': _rating.toString(),
