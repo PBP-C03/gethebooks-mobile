@@ -63,7 +63,7 @@ class _OrderCardState extends State<OrderCard> {
                           widget.item.image,
                           fit: BoxFit.scaleDown,
                           errorBuilder: (context, error, stackTrace) {
-                                return const Text('Image failed to load');
+                                return const  Icon(Icons.book,color:Colors.grey,size: 115,);
                               },
                         ),
                       ),
