@@ -309,7 +309,7 @@ class _CartPageState extends State<CartPage> {
                                           height: 170,
                                           fit: BoxFit.cover,
                                           errorBuilder: (context, error, stackTrace) {
-                                            return const Text('Image failed to load');
+                                            return const Icon(Icons.book,color:Colors.grey,size: 115,);
                                           },
                                         ),
                                       ),
