@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, unused_element, use_build_context_synchronously, unused_import
+
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/qna-forum/qnapage.dart';
 import 'package:gethebooks/screens/profile.dart';
@@ -67,7 +69,7 @@ class MyHomePage extends StatelessWidget {
           // Navigate to QnA Page
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => ForumPage()),
+            MaterialPageRoute(builder: (context) => const ForumPage()),
           );
           break;
 
@@ -84,7 +86,6 @@ class MyHomePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
 
     void _handleLogout() async {
       var response = await http.post(
@@ -97,7 +98,7 @@ class MyHomePage extends StatelessWidget {
       if (response.statusCode == 200) {
         user = UserData(isLoggedIn: false, username: "guest");
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
+            context, MaterialPageRoute(builder: (context) => const LoginPage()));
       } else {
         // If logout failed, show error message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -191,7 +192,7 @@ class MyHomePage extends StatelessWidget {
                     itemBuilder: (BuildContext context, int itemIndex) {
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           image: DecorationImage(
@@ -204,18 +205,18 @@ class MyHomePage extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: 
                     TextField(
                       controller: searchController,
                       decoration: InputDecoration(
                         hintText: 'Search by Title',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: const TextStyle(color: Colors.grey),
                         filled: true,
                         fillColor: Colors.white,
                         suffixIcon: searchController.text.isNotEmpty
                             ? IconButton(
-                                icon: Icon(Icons.clear, color: Colors.grey),
+                                icon: const Icon(Icons.clear, color: Colors.grey),
                                 onPressed: () {
                                   searchController.clear();
                                   (context as Element).markNeedsBuild();
@@ -225,12 +226,12 @@ class MyHomePage extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25.0),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
                       ),
                       onChanged: (value) {
                         (context as Element).markNeedsBuild();
                       },
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                     ),
                 ),
 

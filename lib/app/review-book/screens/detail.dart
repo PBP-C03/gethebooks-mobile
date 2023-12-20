@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/cart-book/screens/cartbook.dart';
 import 'package:gethebooks/app/review-book/screens/review_form.dart';
@@ -164,7 +166,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
           }
 
           ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-            primary: const Color.fromRGBO(255, 220, 0, 1),
+            backgroundColor: const Color.fromRGBO(255, 220, 0, 1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),

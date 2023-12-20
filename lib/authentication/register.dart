@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:gethebooks/authentication/login.dart';
@@ -130,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: registerUser,
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue[300],
+                  backgroundColor: Colors.blue[300],
                   fixedSize: Size(MediaQuery.of(context).size.width - 250, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, unused_local_variable, prefer_typing_uninitialized_variables, library_private_types_in_public_api, prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';

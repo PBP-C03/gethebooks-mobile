@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, use_build_context_synchronously, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -55,7 +57,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
 
       if (response['result'] == 'Success!') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Question Submitted')),
+          const SnackBar(content: Text('Question Submitted')),
         );
 
         // Clear text fields after successful submission
@@ -71,7 +73,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error submitting question')),
+        const SnackBar(content: Text('Error submitting question')),
       );
     }
   }
@@ -80,11 +82,11 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Question'),
+        title: const Text('Add Question'),
       ),
       body: Container(
-        color: Color(0xFFFAF2D3), // Background color form
-        padding: EdgeInsets.all(20.0),
+        color: const Color(0xFFFAF2D3), // Background color form
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -92,7 +94,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
             children: <Widget>[
               TextFormField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: 'Question Title'),
+                decoration: const InputDecoration(labelText: 'Question Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a question title';
@@ -100,7 +102,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 child: DropdownButtonHideUnderline(
                   child: DropdownButtonFormField<int>(
@@ -127,10 +129,10 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: contentController,
-                decoration: InputDecoration(labelText: 'Content'),
+                decoration: const InputDecoration(labelText: 'Content'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some content';
@@ -138,7 +140,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -146,15 +148,14 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFFFDC00),
-                  onPrimary: Colors.black,
-                  padding: EdgeInsets.all(16.0),
+                  foregroundColor: Colors.black, backgroundColor: const Color(0xFFFFDC00),
+                  padding: const EdgeInsets.all(16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(color: Colors.black),
+                    side: const BorderSide(color: Colors.black),
                   ),
                 ),
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),
