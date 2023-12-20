@@ -340,36 +340,40 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ],
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () => updateStock(uploadedBooks[index].pk, true),
-                                  child: Icon(Icons.add),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () => updateStock(uploadedBooks[index].pk, false),
-                                  child: Icon(Icons.remove),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red, size: 30,),
-                                  onPressed: () => showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => AlertDialog(
-                                      title: const Text('Konfirmasi Hapus'),
-                                      content: const Text('Apakah Anda yakin ingin menghapus buku ini?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () => Navigator.of(context).pop(),
-                                          child: const Text('Batal'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            deleteBook(uploadedBooks[index].pk);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('Hapus'),
-                                        ),
-                                      ],
+                                Column(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () => updateStock(uploadedBooks[index].pk, true),
+                                      child: Icon(Icons.add, size: 25,),
                                     ),
-                                  ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red, size: 30,),
+                                      onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) => AlertDialog(
+                                          title: const Text('Konfirmasi Hapus'),
+                                          content: const Text('Apakah Anda yakin ingin menghapus buku ini?'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(),
+                                              child: const Text('Batal'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                deleteBook(uploadedBooks[index].pk);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('Hapus'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () => updateStock(uploadedBooks[index].pk, false),
+                                      child: Icon(Icons.remove, size: 25,),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

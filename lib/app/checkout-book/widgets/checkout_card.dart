@@ -160,12 +160,12 @@ class _OrderCardState extends State<OrderCard> {
     var response;
     if (delta > 0){
         try{
-      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/inc-book/${item.book}/",json.encode({}));
+      response = await request.post("http://127.0.0.1:8000/checkout/inc-book/${item.book}/",json.encode({}));
       // ignore: empty_catches
       }catch(e){}
     }else{
       try{
-      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/dec-book/${item.book}/",json.encode({}));
+      response = await request.post("http://127.0.0.1:8000/checkout/dec-book/${item.book}/",json.encode({}));
       // ignore: empty_catches
       }catch(e){}
     }
@@ -179,7 +179,7 @@ class _OrderCardState extends State<OrderCard> {
   Future<void> _delete(OrderItem item, var request) async {
     var response;
     try{
-    response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/del-book/${item.book}/",json.encode({}));
+    response = await request.post("http://127.0.0.1:8000/checkout/del-book/${item.book}/",json.encode({}));
     // ignore: empty_catches
     }catch(e){}
     setState(() {

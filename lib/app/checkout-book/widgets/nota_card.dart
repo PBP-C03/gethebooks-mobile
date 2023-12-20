@@ -104,7 +104,7 @@ class _OrderCardState extends State<NotaCard> {
   Future<void> _delete(NotaItem item, var request) async {
     var response;
     try{
-      response = await request.post("https://gethebooks-c03-tk.pbp.cs.ui.ac.id/checkout/del-nota/${item.pk}/",json.encode({}));
+      response = await request.post("http://127.0.0.1:8000/checkout/del-nota/${item.pk}/",json.encode({}));
       // ignore: empty_catches
       }catch(e){}
     widget.changed?.call();
