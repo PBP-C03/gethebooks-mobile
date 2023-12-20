@@ -36,7 +36,7 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
   }
 
   Future<List<BookQuestionDetail>> fetchBooks() async {
-    const url = 'http://127.0.0.1:8000/json/'; 
+    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/'; 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       List<dynamic> booksJson = jsonDecode(utf8.decode(response.bodyBytes));
@@ -81,22 +81,23 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
                 _buildDetailItem('Book Name', bookName, Colors.purple),
                 _buildDetailItem('Created At', widget.question.fields.createdAt.toString(), Colors.red),
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Implement action for the button (e.g., add comment)
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFFFDC00),
-                    side: BorderSide(color: Colors.black),
-                  ),
-                  child: const Text(
-                    'Add Comment',
-                    style: TextStyle(fontSize: 18, color: Colors.black), // Mengatur warna teks
-                  ),
-                ),
-              ),              ],
+              // SizedBox(
+              //   width: double.infinity,
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Implement action for the button (e.g., add comment)
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       primary: Color(0xFFFFDC00),
+              //       side: BorderSide(color: Colors.black),
+              //     ),
+              //     child: const Text(
+              //       'Add Comment',
+              //       style: TextStyle(fontSize: 18, color: Colors.black), // Mengatur warna teks
+              //     ),
+              //   ),
+              // ),             
+              ],
             ),
           );
         },

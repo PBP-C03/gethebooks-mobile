@@ -34,7 +34,7 @@ class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key, required this.username}) : super(key: key);
 
   Future<List<Book>> fetchProduct() async {
-    var url = Uri.parse('http://127.0.0.1:8000/json/');
+    var url = Uri.parse('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
     var response = await http.get(url, headers: {"Content-Type": "application/json"});
 
     var data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -89,7 +89,7 @@ class MyHomePage extends StatelessWidget {
     void _handleLogout() async {
       var response = await http.post(
         Uri.parse(
-            'http://127.0.0.1:8000/auth/logout/'), 
+            'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/logout/'), 
         headers: {"Content-Type": "application/json"},
       );
 

@@ -23,7 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> registerUser() async {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/auth/register/'), 
+      Uri.parse('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/register/'), 
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'username': _usernameController.text,

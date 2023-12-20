@@ -31,7 +31,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
   }
 
   Future<void> _fetchBooks() async {
-    final url = Uri.parse('http://127.0.0.1:8000/json/');
+    final url = Uri.parse('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/json/');
     final response = await http.get(url);
 
     List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -51,7 +51,7 @@ class _AddQuestionPageState extends State<AddQuestionPage> {
     };
 
     try {
-      final response = await request.postJson('http://127.0.0.1:8000/qna/add-question-json/', jsonEncode(data));
+      final response = await request.postJson('https://gethebooks-c03-tk.pbp.cs.ui.ac.id/qna/add-question-json/', jsonEncode(data));
 
       if (response['result'] == 'Success!') {
         ScaffoldMessenger.of(context).showSnackBar(
