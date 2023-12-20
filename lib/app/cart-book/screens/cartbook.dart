@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -54,16 +54,16 @@ class _CartPageState extends State<CartPage> {
       builder: (BuildContext context) {
         String note = "";
         return AlertDialog(
-          title: Text("Add Note"),
+          title: const Text("Add Note"),
           content: TextField(
             onChanged: (value) {
               note = value;
             },
-            decoration: InputDecoration(hintText: "Write a note here"),
+            decoration: const InputDecoration(hintText: "Write a note here"),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text("Add"),
+              child: const Text("Add"),
               onPressed: () {
                 addNoteToCart(bookCartId, note);
                 Navigator.of(context).pop();
@@ -78,82 +78,46 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> removeFromCart(int bookCartId) async {
     final request = context.read<CookieRequest>();
-    var success = await request.postJson(
+    await request.postJson(
       'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/remove-from-cart-json/',
       jsonEncode({"id": bookCartId.toString()}),
     );
-    if (success["success"]) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Item removed successfully')),
-      );
-      setState(() {
-        futureBookcarts = fetchBookcarts(request);
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to remove item')),
-      );
-    }
+    setState(() {
+      futureBookcarts = fetchBookcarts(request);
+    });
   }
 
   Future<void> tambahAmount(int bookCartId) async {
     final request = context.read<CookieRequest>();
-    var success = await request.postJson(
+    await request.postJson(
       'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/tambah-amount-json/',
       jsonEncode({"tambah": bookCartId.toString()}),
     );
-    if (success["success"]) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Jumlah buku berhasil ditambahkan')),
-      );
-      setState(() {
-        futureBookcarts = fetchBookcarts(request);
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menambah jumlah buku')),
-      );
-    }
+    setState(() {
+      futureBookcarts = fetchBookcarts(request);
+    });
   }
 
   Future<void> kurangAmount(int bookCartId) async {
     final request = context.read<CookieRequest>();
-    var success = await request.postJson(
+    await request.postJson(
       'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/kurang-amount-json/',
       jsonEncode({"kurang": bookCartId.toString()}),
     );
-    if (success["success"]) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Jumlah buku berhasil dikurangi')),
-      );
-      setState(() {
-        futureBookcarts = fetchBookcarts(request);
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal mengurangi jumlah buku')),
-      );
-    }
+    setState(() {
+      futureBookcarts = fetchBookcarts(request);
+    });
   }
 
   Future<void> addNoteToCart(int bookCartId, String note) async {
     final request = context.read<CookieRequest>();
-    var success = await request.postJson(
+    await request.postJson(
       'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/add-note-json/',
       jsonEncode({"noteid": bookCartId.toString(), "notes": note}),
     );
-    if (success["success"]) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Catatan berhasil ditambahkan')),
-      );
-      setState(() {
-        futureBookcarts = fetchBookcarts(request);
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menambahkan catatan')),
-      );
-    }
+    setState(() {
+      futureBookcarts = fetchBookcarts(request);
+    });
   }
 
 
@@ -269,8 +233,9 @@ class _CartPageState extends State<CartPage> {
                   return FutureBuilder<List<Book>>(
                     future: futureBooks,
                     builder: (context, snapshotBooks) {
-                      if (!snapshotBooks.hasData)
+                      if (!snapshotBooks.hasData) {
                         return const CircularProgressIndicator();
+                      }
 
                       // Create a map of book IDs to Book objects for easy lookup
                       Map<int, Book> booksMap = {
@@ -387,7 +352,7 @@ class _CartPageState extends State<CartPage> {
                                           await removeFromCart(bookcart.pk);
                                         },
                                         style: ElevatedButton.styleFrom(
-                                            primary: Colors.red
+                                            backgroundColor: Colors.red
                                             ),
                                             
                                         child: const Text('Remove',
@@ -454,10 +419,10 @@ class _CartPageState extends State<CartPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OrderPage()));
+                                  builder: (context) => const OrderPage()));
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[600],
+                          backgroundColor: Colors.blue[600],
                           padding: const EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),
                         ),

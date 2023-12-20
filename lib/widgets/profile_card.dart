@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, empty_catches, use_key_in_widget_constructors, library_private_types_in_public_api, sized_box_for_whitespace
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -53,15 +55,15 @@ class _ProfileCardState extends State<ProfileCard> {
       width: double.infinity,
       child: Card(
         elevation: 4.0,
-        margin: EdgeInsets.all(16.0),
+        margin: const EdgeInsets.all(16.0),
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Saldo: $_currentBalance', // Display the current balance
-                style: TextStyle(fontSize: 16.0),
+                style: const TextStyle(fontSize: 16.0),
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
@@ -138,7 +140,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     },
                   );
                 },
-                child: Text('Top Up'),
+                child: const Text('Top Up'),
               ),
             ],
           ),

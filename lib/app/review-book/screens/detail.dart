@@ -1,3 +1,4 @@
+// ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:gethebooks/app/cart-book/screens/cartbook.dart';
@@ -6,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:gethebooks/models/book.dart';
 import 'package:gethebooks/app/review-book/models/review.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import '../widgets/review_card.dart';
 
 class DetailBookPage extends StatefulWidget {
@@ -13,7 +16,11 @@ class DetailBookPage extends StatefulWidget {
   final int filter;
   final String username;
 
-  const DetailBookPage({super.key, required this.book, required this.filter, required this.username});
+  const DetailBookPage(
+      {super.key,
+      required this.book,
+      required this.filter,
+      required this.username});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -32,15 +39,13 @@ class _DetailBookPageState extends State<DetailBookPage> {
     filter = widget.filter;
     username = widget.username;
   }
-  
+
   Future<List<Review>> fetchReview() async {
-    // var url = Uri.parse(
-    //     'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/'
-    // );
     var url = Uri.parse(
-      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/'
-    );
-    var response = await http.get(url, headers: {"Content-Type": "application/json"},
+        'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/book/${book.pk}/get-reviews/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
     );
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -54,8 +59,17 @@ class _DetailBookPageState extends State<DetailBookPage> {
     return list_review;
   }
 
+  Future<void> addToCart(int bookId) async {
+    final request = context.read<CookieRequest>();
+    await request.postJson(
+      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/cartbook/add-to-cart-json/',
+      jsonEncode({"book_id": bookId}),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final request = context.read<CookieRequest>();
     return Scaffold(
       backgroundColor: Colors.yellow[100],
       appBar: AppBar(
@@ -97,7 +111,8 @@ class _DetailBookPageState extends State<DetailBookPage> {
           }
 
           // ignore: unnecessary_null_comparison
-          if (null == reviews) { // review section
+          if (null == reviews) {
+            // review section
             reviewWidget = const Center(child: CircularProgressIndicator());
           } else {
             if (!snapshot.hasData) {
@@ -105,52 +120,53 @@ class _DetailBookPageState extends State<DetailBookPage> {
                 children: [
                   Text(
                     "Tidak ada data review",
-                    style:
-                    TextStyle(color: Colors.black, fontSize: 20),
+                    style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   SizedBox(height: 8),
                 ],
               );
             } else {
-              List<Review> filteredReviews = filter != 0 ? reviews.where((review) => review.fields.rating == filter).toList() : reviews.toList();
+              List<Review> filteredReviews = filter != 0
+                  ? reviews
+                      .where((review) => review.fields.rating == filter)
+                      .toList()
+                  : reviews.toList();
               if (filteredReviews.isEmpty) {
                 reviewWidget = const Column(
                   children: [
                     Text(
                       "Tidak ada data review",
-                      style:
-                      TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                     SizedBox(height: 8),
                   ],
                 );
               } else {
                 reviewWidget = ListView.builder(
-                  itemCount: filteredReviews.length,
-                  itemBuilder: (_, index) {
-                    Review review = filteredReviews[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
-                      padding: const EdgeInsets.only(
-                          left: 20.0, top: 5.0, right: 20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ReviewCard(review),
-                        ],
-                      ),
-                    );
-                  }
-                );
+                    itemCount: filteredReviews.length,
+                    itemBuilder: (_, index) {
+                      Review review = filteredReviews[index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                        padding: const EdgeInsets.only(
+                            left: 20.0, top: 5.0, right: 20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ReviewCard(review),
+                          ],
+                        ),
+                      );
+                    });
               }
             }
           }
 
           ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-            primary: const Color.fromRGBO(255, 220, 0, 1),
+            backgroundColor: const Color.fromRGBO(255, 220, 0, 1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -166,33 +182,61 @@ class _DetailBookPageState extends State<DetailBookPage> {
           if (!hasReview) {
             bookUtilsWidgets.add(ElevatedButton(
                 style: buttonStyle,
-                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewFormPage(book, username)));},
+                // onPressed: () => showAddBookBottomSheet(context),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReviewFormPage(book, username)),
+                  );
+                },
                 child: Text('Add Review', style: textStyle)));
-            bookUtilsWidgets.add(const SizedBox(width: 10, height: 50));
+          } else {
+            bookUtilsWidgets.add(ElevatedButton(
+                style: buttonStyle,
+                onPressed: null,
+                child: Text('Add Review', style: textStyle)));
           }
-          bookUtilsWidgets.add(ElevatedButton(
-              style: buttonStyle,
-              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage()));},
-              child: Text('Add To Cart', style: textStyle)));
+          bookUtilsWidgets.add(const SizedBox(width: 10, height: 50));
+          if (book.fields.stocks != 0) {
+            bookUtilsWidgets.add(ElevatedButton(
+                style: buttonStyle,
+                onPressed: () {
+                  addToCart(book.pk);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartPage()));
+                },
+                child: Text('Add To Cart', style: textStyle)));
+          } else {
+            bookUtilsWidgets.add(ElevatedButton(
+                style: buttonStyle,
+                onPressed: null,
+                child: Text('Add To Cart', style: textStyle)));
+          }
 
           List<Widget> filterWidgets = [];
           filterWidgets.add(ElevatedButton(
               style: buttonStyle,
               onPressed: () {
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => DetailBookPage(book: book, filter: 0, username: username)));
-                },
-              child: Text(
-                  'All',
-                  style: textStyle
-              )
-          ));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailBookPage(
+                            book: book, filter: 0, username: username)));
+              },
+              child: Text('All', style: textStyle)));
 
           for (int i = 1; i <= 5; i++) {
             filterWidgets.add(const SizedBox(width: 10, height: 50));
             filterWidgets.add(ElevatedButton(
                 style: buttonStyle,
-                onPressed: () {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DetailBookPage(book: book, filter: i, username: username)));},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailBookPage(
+                              book: book, filter: i, username: username)));
+                },
                 child: Text(i.toString(), style: textStyle)));
           }
 
@@ -203,44 +247,41 @@ class _DetailBookPageState extends State<DetailBookPage> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                      book.fields.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                      ),
+                    book.fields.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                      book.fields.author,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 20,
-                      ),
+                    book.fields.author,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
-                      "Rp. ${book.fields.price}"
-                  ),
+                  child: Text("Rp. ${book.fields.price}"),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Icon(
-                        Icons.star,
-                        color: Colors.orange,
-                      ),
-                      Text(
-                        '$average / 5.0 (${reviews.length})',
-                      ),
-                    ],
-                  )
-                ),
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Icon(
+                          Icons.star,
+                          color: Colors.orange,
+                        ),
+                        Text(
+                          '${average.toStringAsFixed(2)} / 5.0 (${reviews.length})',
+                        ),
+                      ],
+                    )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: bookUtilsWidgets,

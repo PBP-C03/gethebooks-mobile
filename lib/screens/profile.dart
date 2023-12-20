@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, sort_child_properties_last, sized_box_for_whitespace
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> deleteBook(int bookId) async {
     final request = context.read<CookieRequest>();
     var response = await request.postJson(
-      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/delete-book-json/',
+      "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/delete-book-json/",
       jsonEncode({'id': bookId}),
     );
 
@@ -87,8 +87,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> updateStock(int bookId, bool isAdding) async {
     final request = context.read<CookieRequest>();
     var endpoint = isAdding ? 'tambah-stocks-json/' : 'kurang-stocks-json/';
-    var response = await request.postJson(
-      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/$endpoint',
+    await request.postJson(
+      "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/$endpoint",
       jsonEncode({'id': bookId}),
     );
 
@@ -104,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> uploadBook(Map<String, dynamic> bookData) async {
     final request = context.read<CookieRequest>();
     var response = await request.postJson(
-      'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/upload-book-json/',
+      "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook/upload-book-json/",
       jsonEncode(bookData),
     );
 
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<List<Uploadbook>> fetchUploadedbooks() async {
-    const url = 'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook-json/';
+    const url = "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/uploadbook-json/";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -178,14 +178,14 @@ class _ProfilePageState extends State<ProfilePage> {
     void _handleLogout() async {
       var response = await http.post(
         Uri.parse(
-            'https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/logout/'), 
+            "https://gethebooks-c03-tk.pbp.cs.ui.ac.id/auth/logout/"), 
         headers: {"Content-Type": "application/json"},
       );
 
       if (response.statusCode == 200) {
         user = UserData(isLoggedIn: false, username: "guest");
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
+            context, MaterialPageRoute(builder: (context) => const LoginPage()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logout failed. Please try again.')),
@@ -213,13 +213,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 future: fetchProfileData(request),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text("Error: ${snapshot.error}");
                   } else {
                     ProfileData profileData = snapshot.data!;
                     return Container(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           CircleAvatar(
@@ -227,13 +227,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundColor: Colors.yellow,
                             child: Text(
                               profileData.name.substring(0, 3).toUpperCase(), 
-                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold ,color: Colors.black),
+                              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold ,color: Colors.black),
                             ),
                           ),
                           const SizedBox(height: 10,),
                           Text(
                             'Hi! ${user.username}',
-                            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,
@@ -241,10 +241,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.only(top: 20.0),
                               child: ElevatedButton(
                                 onPressed: _handleLogout,
-                                child: Text('Logout'),
+                                child: const Text('Logout'),
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.red, // Logout button color
-                                  onPrimary: Colors.white, // Logout text color
+                                  foregroundColor: Colors.white, backgroundColor: Colors.red, // Logout text color
                                 ),
                               ),
                             ),
@@ -252,8 +251,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ProfileCard(profileData.name, profileData.balance),
                           ElevatedButton(
                             onPressed: () => showAddBookBottomSheet(context),
-                            child: Text('Upload Your Book'),
-                            style: ElevatedButton.styleFrom(primary: Colors.blue, onPrimary: Colors.white),
+                            child: const Text('Upload Your Book'),
+                            style: ElevatedButton.styleFrom(foregroundColor: Colors.white, backgroundColor: Colors.blue),
                           ),
                         ],
                       ),
@@ -277,22 +276,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 future: Future.value(uploadedBooks),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text("Error: ${snapshot.error}");
                   } else {
                     List<Uploadbook> uploadedBooks = snapshot.data!;
                     return ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: uploadedBooks.length,
                       itemBuilder: (context, index) {
                         Fields book = uploadedBooks[index].fields;
                         return Card(
                           elevation: 4.0,
-                          margin: EdgeInsets.all(8.0),
+                          margin: const EdgeInsets.all(8.0),
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
                                 ClipRRect(
@@ -340,36 +339,40 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ],
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () => updateStock(uploadedBooks[index].pk, true),
-                                  child: Icon(Icons.add),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () => updateStock(uploadedBooks[index].pk, false),
-                                  child: Icon(Icons.remove),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red, size: 30,),
-                                  onPressed: () => showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) => AlertDialog(
-                                      title: const Text('Konfirmasi Hapus'),
-                                      content: const Text('Apakah Anda yakin ingin menghapus buku ini?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () => Navigator.of(context).pop(),
-                                          child: const Text('Batal'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            deleteBook(uploadedBooks[index].pk);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('Hapus'),
-                                        ),
-                                      ],
+                                Column(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () => updateStock(uploadedBooks[index].pk, true),
+                                      child: const Icon(Icons.add, size: 25,),
                                     ),
-                                  ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red, size: 30,),
+                                      onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) => AlertDialog(
+                                          title: const Text('Konfirmasi Hapus'),
+                                          content: const Text('Apakah Anda yakin ingin menghapus buku ini?'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(),
+                                              child: const Text('Batal'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                deleteBook(uploadedBooks[index].pk);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('Hapus'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () => updateStock(uploadedBooks[index].pk, false),
+                                      child: const Icon(Icons.remove, size: 25,),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -380,7 +383,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   }
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -401,7 +404,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   future: fetchNota(request),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
                     } else {
@@ -427,7 +430,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
             ],
           ),
         ),
